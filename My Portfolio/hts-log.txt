@@ -1,0 +1,12 @@
+HTTrack3.49-2+htsswf+htsjava launched on Tue, 28 Jan 2025 17:51:55 at https://pradeep-m-portfolio.netlify.app/ +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://pradeep-m-portfolio.netlify.app/ -O1 "C:\Users\PC\Documents\My Portfolio" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+17:52:05	Error: 	"Forbidden" (403) at link https://kit.fontawesome.com/20c5629a29.js (from https://pradeep-m-portfolio.netlify.app/)
+
+HTTrack Website Copier/3.49-2 mirror complete in 11 seconds : 21 links scanned, 19 files written (2956042 bytes overall) [2838610 bytes received at 258055 bytes/sec], 171171 bytes transferred using HTTP compression in 5 files, ratio 21%, 2.1 requests per connection
+(1 errors, 0 warnings, 0 messages)
