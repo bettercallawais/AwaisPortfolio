@@ -431,10 +431,12 @@ body.is-ready .hero__name .char { animation-play-state: running; }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: clamp(1.4rem, 3vw, 1.9rem); }
 
 .hero__figure { justify-self: center; width: min(100%, 335px); }
-.portrait { aspect-ratio: 1; border-radius: var(--r-xl); overflow: hidden; padding: 6px; }
+/* Circular. aspect-ratio:1 keeps it a true circle at every width, and
+   the glass ring, rim light and specular all inherit the radius. */
+.portrait { aspect-ratio: 1; border-radius: 50%; overflow: hidden; padding: 6px; }
 .portrait img {
   width: 100%; height: 100%; object-fit: cover;
-  border-radius: calc(var(--r-xl) - 6px);
+  border-radius: 50%;
 }
 
 .hero__stripwrap { width: min(var(--wrap), 100% - var(--gutter) * 2); margin-inline: auto; }
