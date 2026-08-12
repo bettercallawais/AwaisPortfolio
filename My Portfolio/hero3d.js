@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   Hero — an animated data terrain: ~900 instanced bars rippling
+   Hero — an animated data terrain: ~2,000 instanced bars rippling
    like a report mid-refresh, over a drifting point field.
 
    Theme-aware and motion-aware. Under reduced motion the scene is
@@ -8,29 +8,31 @@
 
 import * as THREE from 'three';
 
-const COLS = 40;
-const ROWS = 26;
-const GAP = 0.5;
+const COLS = 58;
+const ROWS = 34;
+const GAP = 0.42;
 const COUNT = COLS * ROWS;
 
-/* Bars ramp low → high like a sequential data-viz scale: cool steel at the
-   base, the brand accent through the middle, a warm highlight at the peaks.
+/* Bars ramp low → high like a sequential data-viz scale, but the ramp is
+   deliberately back-loaded: the field stays cool steel almost all the way
+   through and only the far peaks pick up the brand accent. It is a backdrop
+   behind body copy, so it has to stay quiet enough to read over.
    Lighting is a warm key against a cool fill, so form reads without the
    colour ramp having to do the work alone. */
 const PALETTE = {
   dark: {
     fog: 0x0a0a0b,
-    a: 0x4a5464, b: 0xff5a1f, c: 0xffc24a,
-    ambient: 1.05, hemiSky: 0x8fa0bc, hemiGround: 0x14100e, hemi: 1.25,
-    dir: 1.6, keyColor: 0xff5a1f, key: 780, rimColor: 0x5c6b85, rim: 700,
+    a: 0x3d4756, b: 0xd44e1d, c: 0xffab42,
+    ambient: 1.2, hemiSky: 0x8fa0bc, hemiGround: 0x14100e, hemi: 1.35,
+    dir: 1.6, keyColor: 0xff5a1f, key: 950, rimColor: 0x5c6b85, rim: 850,
     star: 0x8b8b93, starOpacity: 0.5,
     exposure: 1.12,
   },
   light: {
     fog: 0xf6f5f2,
-    a: 0xa8aebc, b: 0xde4711, c: 0xf2a03d,
-    ambient: 1.45, hemiSky: 0xffffff, hemiGround: 0xd8d2c6, hemi: 1.55,
-    dir: 2.05, keyColor: 0xde4711, key: 560, rimColor: 0x8892a6, rim: 520,
+    a: 0x78808f, b: 0xc0491c, c: 0xdd8b3c,
+    ambient: 0.95, hemiSky: 0xffffff, hemiGround: 0xd8d2c6, hemi: 1.05,
+    dir: 1.5, keyColor: 0xde4711, key: 620, rimColor: 0x8892a6, rim: 560,
     star: 0x9a9488, starOpacity: 0.32,
     exposure: 1.0,
   },
@@ -51,10 +53,10 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   renderer.toneMappingExposure = P.exposure;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(P.fog, 0.062);
+  scene.fog = new THREE.FogExp2(P.fog, 0.038);
 
-  const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 120);
-  camera.position.set(0, 6.4, 14.5);
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 120);
+  camera.position.set(0, 6.8, 19);
 
   /* ── Lights ──────────────────────────────────────────────
      Three r155+ uses physical light units, so point intensity is
@@ -72,7 +74,7 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   scene.add(ambient, hemi, dir, key, rim);
 
   /* ── Bars ────────────────────────────────────────────────── */
-  const geo = new THREE.BoxGeometry(0.29, 1, 0.29);
+  const geo = new THREE.BoxGeometry(0.22, 1, 0.22);
   geo.translate(0, 0.5, 0); // base pivot: scaling grows upward
 
   // Low metalness on purpose — there is no environment map, and metal
@@ -100,8 +102,10 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
     for (let c = 0; c < COLS; c++) {
       for (let r = 0; r < ROWS; r++) {
         const t = (c / (COLS - 1)) * 0.65 + (r / (ROWS - 1)) * 0.35;
-        tmp.copy(cA).lerp(cB, Math.min(t * 1.5, 1));
-        if (t > 0.7) tmp.lerp(cC, ((t - 0.7) / 0.3) * 0.55);
+        // Squared so the accent is confined to the far end of the ramp
+        // instead of flooding the middle of the field.
+        tmp.copy(cA).lerp(cB, t * t);
+        if (t > 0.82) tmp.lerp(cC, ((t - 0.82) / 0.18) * 0.4);
         bars.setColorAt(i, tmp);
         i++;
       }
@@ -181,7 +185,7 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
 
   /* ── Draw ────────────────────────────────────────────────── */
   // Bar heights depend only on `t`. When the scene is frozen (reduced
-  // motion) a scroll or resize still needs a redraw, but re-solving 1040
+  // motion) a scroll or resize still needs a redraw, but re-solving 1,972
   // wave equations for an unchanged `t` would be pure waste.
   let barsDirty = true;
 
@@ -209,10 +213,10 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
       eased.x += (pointer.x - eased.x) * 0.045;
       eased.y += (pointer.y - eased.y) * 0.045;
     }
-    camera.position.x = eased.x * 2.4;
-    camera.position.y = 6.4 - eased.y * 1.3 + scrollT * 2.6;
-    camera.position.z = 14.5 + scrollT * 4;
-    camera.lookAt(0, 0.6 - scrollT * 0.8, 0);
+    camera.position.x = eased.x * 2.2;
+    camera.position.y = 6.8 - eased.y * 1.2 + scrollT * 3.2;
+    camera.position.z = 19 + scrollT * 5;
+    camera.lookAt(0, 0.4 - scrollT * 0.8, 0);
 
     bars.rotation.y = Math.sin(t * 0.08) * 0.09;
     stars.rotation.y = t * 0.012;

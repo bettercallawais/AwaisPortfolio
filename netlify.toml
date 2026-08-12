@@ -1,0 +1,10 @@
+# Zero-build static site. Declaring this here (rather than only in the
+# Netlify UI) means every deploy uses the same settings and no build
+# step runs, so a push publishes in seconds instead of queueing.
+
+[build]
+  publish = "My Portfolio"
+  command = ""
+
+[build.processing]
+  skip_processing = true
