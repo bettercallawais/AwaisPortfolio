@@ -1,919 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
-  
-<!-- Mirrored from pradeep-m-portfolio.netlify.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 28 Jan 2025 12:51:56 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
-<head>
+<html lang="en" data-theme="dark" data-motion="full">
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="../kit.fontawesome.com/20c5629a29.html"
-      crossorigin="anonymous"
-    ></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#06070c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css" />
-    <a href="docs/my-document.pdf" target="_blank">View Document</a>
-
-    <title>Awais's Portfolio</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="images/MeSmol.png"
+    <title>Awais Ali — Business Intelligence Analyst</title>
+    <meta
+      name="description"
+      content="Business Intelligence Analyst in Lahore. Semantic models, ETL pipelines and dashboards in Power BI, Looker Studio, SQL, Python and BigQuery."
     />
-  </head>
-  <body>
-    <header>
-      <nav id="desktop-nav-container">
-        <a href="#home" class="logo">Awais's Portfolio</a>
-        <i class="fa-solid fa-bars" id="menu-bar-icone"></i>
-        <ul class="nav-list">
-          <li><a href="#about" class="active">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#project">Projects</a></li>
-          <li><a href="#certificate">Blogs</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+    <meta name="author" content="Awais Ali" />
 
-      <!--<nav id="hamburger-nav">
-        <a href="#home" class="logo">Awais's Portfolio</a>
-        <div class="hamburger-menu">
-          <div class="hamburger-icon" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="menu-links">
-            <li><a href="#about" onclick="toggleMenu()">About</a></li>
-            <li><a href="#skills" onclick="toggleMenu()">Skills</a></li>
-            <li><a href="#project" onclick="toggleMenu()">Project</a></li>
-            <li>
-              <a href="#certificate" onclick="toggleMenu()">Certificates</a>
-            </li>
-            <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-          </div>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Awais Ali — Business Intelligence Analyst" />
+    <meta property="og:description" content="Semantic models, ETL pipelines and dashboards. Power BI · Looker Studio · SQL · Python · BigQuery." />
+    <meta property="og:image" content="images/awais.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="images/awais-sm.jpg" />
+
+    <!-- Theme + motion resolved before first paint, so there is no flash. -->
+    <script>
+      (() => {
+        const d = document.documentElement;
+        const t = localStorage.getItem('theme');
+        d.dataset.theme = t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        const m = localStorage.getItem('motion');
+        d.dataset.motion = m || (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduced' : 'full');
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <link rel="preload" as="image" href="images/awais.webp" type="image/webp" />
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="importmap">
+      { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Awais Ali",
+        "jobTitle": "Assistant Manager Business Intelligence",
+        "worksFor": { "@type": "Organization", "name": "Beaconhouse Group" },
+        "email": "mailto:ds.awaisali@gmail.com",
+        "telephone": "+923064086446",
+        "address": { "@type": "PostalAddress", "addressLocality": "Lahore", "addressCountry": "PK" },
+        "sameAs": ["https://www.linkedin.com/in/awaisali-bi"]
+      }
+    </script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Refraction filter used by the glass panels. -->
+    <svg class="defs" aria-hidden="true" focusable="false">
+      <filter id="lg-refract" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" seed="9" result="turb" />
+        <feGaussianBlur in="turb" stdDeviation="5" result="soft" />
+        <feDisplacementMap in="SourceGraphic" in2="soft" scale="9" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+
+    <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
+
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header class="header" id="header">
+      <nav class="nav lg lg--bar" aria-label="Primary">
+        <a href="#top" class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          Awais Ali
+        </a>
+
+        <ul class="nav__list" id="nav-list">
+          <li><a href="#about" data-nav>About</a></li>
+          <li><a href="#work" data-nav>Work</a></li>
+          <li><a href="#stack" data-nav>Stack</a></li>
+          <li><a href="#projects" data-nav>Projects</a></li>
+          <li><a href="#contact" data-nav>Contact</a></li>
+          <li class="nav__pill" aria-hidden="true"></li>
+        </ul>
+
+        <div class="nav__tools">
+          <button class="icon-btn" id="motion-toggle" type="button" aria-pressed="true" title="Toggle animation">
+            <svg class="i-motion" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4" /></svg>
+            <svg class="i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18" /></svg>
+            <span class="sr-only">Toggle animation</span>
+          </button>
+          <button class="icon-btn" id="theme-toggle" type="button" title="Toggle theme">
+            <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" /></svg>
+            <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" /></svg>
+            <span class="sr-only">Toggle theme</span>
+          </button>
+          <button class="icon-btn nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list">
+            <span></span><span></span>
+            <span class="sr-only">Menu</span>
+          </button>
         </div>
-      </nav> -->
+      </nav>
     </header>
 
-    <section id="home" class="home-container">
-      <img
-        src="images/Me.png"
-        alt="profile pic"
-        class="profile-picture"
-      />
-      <div class="home-content">
-        <p class="para1">Hello, I'm</p>
-        <h1 class="name">Awais Ali</h1>
-        <p class="para2">Data Analyst / BI Developer</p>
-        <div class="btn-container">
-          <a
-            href="docs\AwaisResume.pdf"
-            target="_blank"
-            class="button-1"
-            >Download Resume</a
-          >
-          <a
-            href="https://www.linkedin.com/in/awais-ali-b0b19b226/"
-            target="_blank"
-            class="button-2"
-            >Have Doubts? Let's Connect</a
-          >
-        </div>
-        <div class="social-media-profiles">
-          <a href="https://www.linkedin.com/in/awais-ali-b0b19b226/"><img
-              src="images\linkedin.png"
-            /></a>
-          <a href="mailto:ds.awaisali@gmail.com"><img
-              src="images\mail.png"
-            /></a>
-          </a>
-        </div>
-      </div>
-      <!-- <a href="#about"><i class="fa-solid fa-angles-down arrow-icon"></i></a> -->
-    </section>
+    <main id="main">
+      <!-- ── Hero ──────────────────────────────────────────── -->
+      <section id="top" class="hero">
+        <canvas id="hero-canvas" class="hero__canvas" aria-hidden="true"></canvas>
+        <div class="hero__wash" aria-hidden="true"></div>
 
-    <section id="about" class="about-container">
-      <div class="headings">
-        <p class="headings-para">Get To Know More</p>
-        <h1 class="section-heading">About Me</h1>
-      </div>
+        <div class="hero__inner">
+          <p class="kicker" data-reveal>Lahore, Pakistan — <span class="mono">33°C / UTC+5</span></p>
 
-      <div class="education">
-        <h1>Education</h1>
-        <p class="degree">Bachelors in Artificial Intelligence</p>
-        <p class="clg-name">
-          University of Management & Technology <a class="clg-year">2021 - present</a>
-        </p>
-      </div>
+          <h1 class="hero__name" data-parallax="-0.28">
+            <span class="line"><span data-split>Awais</span></span>
+            <span class="line line--2"><span data-split>Ali</span></span>
+          </h1>
 
-      <div class="timeline">
-        <h1 class="experience-heading">Experience</h1>
-        <div class="container-timeline left-container">
-          <img
-            src="images\camel.png"
-            alt="Deloitte Logo"
-          />
-          <div class="text-box">
-            <h2>Kaswa.Ai</h2>
-            <h1 class="role">Business Intelligence Developer</h1>
-            <small>Jan 2022 - Present </small>
-            <span class="left-container-arrow"></span>
-          </div>
-        </div>
-      </div>
-      <!-- <a href="#skills"><i class="fa-solid fa-angles-down arrow-icon"></i></a> -->
-    </section>
-
-    <section id="skills" class="skills-container">
-      <div class="headings">
-        <p class="headings-para">Explore My</p>
-        <h1 class="section-heading">Skills</h1>
-      </div>
-      <div class="skills">
-        <p>Data Analysis</p>
-        <p>Power BI</p>
-        <p>Power Query</p>
-        <p>Business Intelligence</p>
-        <p>Microsoft Fabric</p>
-        <p>Data Modeling</p>
-        <p>Data Warehousing</p>
-        <p>ETL</p>
-        <p>DAX</p>
-        <p>SQL</p>
-        <p>Python</p>
-        <p>Django</p>
-        <p>Neo4j</p>
-        <p>Problem-Solving</p>
-        <p>Critical Thinking</p>
-        <p>Communication</p>
-        <p>Attention to Detail</p>
-        <p>Analytical Thinking</p>
-        <p>Power Point</p>
-        <p>Story Telling</p>
-      </div>
-      <!--<a href="#certificate"
-        ><i class="fa-solid fa-angles-down arrow-icon"></i
-      ></a>-->
-    </section>
-
-    <section id="project" class="projects-container">
-      <div class="headings">
-        <p class="headings-para">Browse My Recent</p>
-        <h1 class="section-heading">Projects</h1>
-      </div>
-      <div class="project-card-container">
-        <div class="card-container">
-          <img
-            src="images\projects\customer support.png"
-            alt="thumbnail"
-            class="project-thumbnail"
-          />
-          <div class="project-title">
-            <h1>Customer Support Analysis</h1>
-
-            <div class="button-logo-container">
-              <button id="button" onclick="liveDashboard()">
-                View Project
-              </button>
-              <img
-                src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                alt="skill logo"
-              />
-            </div>
-          </div>
-          <div id="live-dashboard" class="dashboard-main">
-            <div class="live-dashboard-container">
-              <i
-                class="fa-solid fa-xmark close-icon"
-                onclick="closeDashboard()"
-              ></i>
-              <h1>
-                Customer Support Analysis
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                  alt=""
-                  class="logo-skill"
-                />
-              </h1>
-              <hr class="hr-line" />
-              <p class="main-descirption">
-              
-              </p>
-              <div class="project-details-container">
-                <div class="details-content">
-                  <h1>Project Details</h1>
-                  <p>
-                    The call center report is a comprehensive, multi-page analysis designed to evaluate key performance metrics 
-                    and operational efficiency. It focuses on tracking essential KPIs such as Average Call Duration, First Call Resolution Rate, 
-                    Call Abandonment Rate, and Agent Performance Metrics.
-                  </p>
-
-                  <p>
-                    The report provides actionable insights through visually engaging and self-explanatory charts, helping stakeholders identify trends, 
-                    optimize resource allocation, and enhance customer satisfaction.
-                  </p>
-
-                  <p>
-                    By addressing critical performance areas, this report empowers decision-makers to implement strategies for improving 
-                    overall call center operations.
-                  </p>
-                </div>
-                <!-- <div class="presentation-container">
-                  <h1>Presentation Video</h1>
-                  <iframe
-                    class="video-frame"
-                    src="https://www.youtube.com/embed/yC4r7WYaFqc"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
-                </div> -->
-              </div>
-
-              <h1 class="live-dashboard-heading">Live Dashboard</h1>
-              <iframe
-                src="https://app.powerbi.com/view?r=eyJrIjoiNWUzYTI1NTYtODA4ZS00NmU0LTk4MjMtOWIzZmY3ZjA2NmE4IiwidCI6IjRhYTNlNzM3LTdjZjUtNDM4Ni1hMjM5LWI1Y2VkY2Q2MjVmMSIsImMiOjl9"
-                frameborder="0"
-                class="frame-rate"
-              ></iframe>
-
-              <div class="project-view-container">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-container">
-          <img
-            src="images\projects\ecom.png"
-            alt="thumbnail"
-            class="project-thumbnail"
-          />
-          <div class="project-title">
-            <h1>Ecommerce Finance Analysis</h1>
-
-            <div class="button-logo-container">
-              <button id="button" onclick="liveDashboard()">
-                View Project
-              </button>
-              <img
-                src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                alt="skill logo"
-              />
-            </div>
-          </div>
-          <div id="live-dashboard2" class="dashboard-main">
-            <div class="live-dashboard-container">
-              <i
-                class="fa-solid fa-xmark close-icon"
-                onclick="closeDashboard()"
-              ></i>
-              <h1>
-                Ecommerce Finance Analysis
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                  alt=""
-                  class="logo-skill"
-                />
-              </h1>
-              <hr class="hr-line" />
-              <!-- <p class="main-descirption">
-                Revive Insights 360 for Marriott Bonvoy: a PowerBI project
-                revealing weekly hotel performance metrics, occupancy trends,
-                room distribution, and KPI cards tailored for executive-level
-                decision-makers.
-              </p> -->
-
-              <div class="project-details-container">
-                <div class="details-content">
-                  <h1>Project Details</h1>
-                  <p>
-                    The ecommerce dashboard is a comprehensive, self-explanatory tool designed to analyze key performance metrics 
-                    and optimize business performance. It focuses on tracking essential KPIs such as Total Sales, Conversion Rate, 
-                    Customer Retention Rate, Average Order Value, and Product Performance.
-                  </p>
-                  <p>
-                    With visually engaging and interactive charts, the dashboard provides actionable insights to help stakeholders 
-                    identify trends, improve marketing strategies, and enhance customer experience.
-                  </p>
-                  <p>
-                    By addressing critical business areas, this dashboard empowers decision-makers to drive growth and make 
-                    data-driven decisions effectively.
-                  </p>
-                </div>
-                <div class="presentation-container">
-                  <!-- <h1>Presentation Video</h1>
-                  <iframe
-                    class="video-frame"
-                    src="https://www.youtube.com/embed/wrtcperJ4IE?si=w6TtCShtlqDV_sbg"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  ></iframe> -->
-                </div>
-              </div>
-
-              <h1 class="live-dashboard-heading">Live Dashboard</h1>
-              <iframe
-                src="https://app.powerbi.com/reportEmbed?reportId=d9459124-e092-48e6-b607-7d6a1be294d4&autoAuth=true&ctid=4aa3e737-7cf5-4386-a239-b5cedcd625f1"
-                frameborder="0"
-                width="100%"
-                height="800"
-                class="frame-rate"
-              ></iframe>
-              <!-- <div class="project-view-container">
-                <a
-                  href="https://www.linkedin.com/posts/pradeep-m-analyst_datamagic-reviveinsights-codebasics-activity-7155899561398427648-r_JB/?utm_source=share&amp;utm_medium=member_desktop"
-                  class="linkedin-engagement"
-                  target="_blank"
-                  ><i class="fa-brands fa-linkedin dashboard-icon1"></i>View
-                  Project Engagement</a
-                >
-
-                <a
-                  href="https://github.com/pradeep-the-analyst/ReviveIQ-Insights"
-                  class="githun-repo"
-                  target="_blank"
-                  ><i class="fa-brands fa-github dashboard-icon2"></i>View
-                  Project on GitHUB</a
-                >
-              </div> -->
-            </div>
-          </div>
-        </div>
-
-        <div class="card-container">
-          <img
-            src="images\projects\HC.png"
-            alt="thumbnail"
-            class="project-thumbnail"
-          />
-          <div class="project-title">
-            <h1>Health Care Analysis</h1>
-
-            <div class="button-logo-container">
-              <button id="button" onclick="liveDashboard()">
-                View Project
-              </button>
-              <img
-                src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                alt="skill logo"
-              />
-            </div>
-          </div>
-          <div id="live-dashboard3" class="dashboard-main">
-            <div class="live-dashboard-container">
-              <i
-                class="fa-solid fa-xmark close-icon"
-                onclick="closeDashboard()"
-              ></i>
-              <h1>
-                Health Care Analysis
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                  alt=""
-                  class="logo-skill"
-                />
-              </h1>
-              <hr class="hr-line" />
-              <!-- <p class="main-descirption">
-                AtliQ Sales and Finance Analytics Reports showcases my
-                exploration into customer and market performance, financial
-                health, and strategic decision-making. Leveraged ETL
-                methodologies, Power Query, Power Pivot, and DAX to craft
-                impactful reports.
-              </p> -->
-
-              <div class="details-content third-project">
-                <h1>Project Details</h1>
-                <p>
-                  The healthcare dashboard is a comprehensive, self-explanatory tool designed to analyze key performance metrics 
-                  and enhance decision-making in healthcare operations. It focuses on tracking essential KPIs such as Patient Admission Rates, 
-                  Average Length of Stay, Bed Occupancy Rate, Treatment Success Rate, and Patient Satisfaction Scores.
-                </p>
-                <p>
-                  Featuring visually engaging and storytelling charts, the dashboard provides actionable insights to help 
-                  stakeholders identify trends, optimize resource allocation, and improve patient care. By addressing critical 
-                  healthcare areas, this dashboard empowers decision-makers to drive better outcomes and ensure efficient, 
-                  data-driven healthcare management.
-                </p>
-              </div>
-
-              <!-- <div class="project-view-container">
-                <a
-                  href="https://www.linkedin.com/posts/pradeep-m-analyst_dataanalysis-excel-dataanalytics-activity-7138055223394140160-wGoB/?utm_source=share&amp;utm_medium=member_desktop"
-                  class="linkedin-engagement"
-                  target="_blank"
-                  ><i class="fa-brands fa-linkedin dashboard-icon1"></i>View
-                  Project Engagement</a
-                >
-
-                <a
-                  href="https://github.com/pradeep-the-analyst/excel-AtliQ-Reports"
-                  class="githun-repo"
-                  target="_blank"
-                  ><i class="fa-brands fa-github dashboard-icon2"></i>View
-                  Project on GitHUB</a
-                >
-              </div> -->
-            </div>
-          </div>
-        </div>
-
-        <!-- <div class="card-container">
-          <img
-            src="https://res.cloudinary.com/dffu1ungl/image/upload/v1725279944/9d22d85308_mcskun.webp"
-            alt="thumbnail"
-            class="project-thumbnail"
-          />
-          <div class="project-title">
-            <h1>Festive Campaign Analysis</h1>
-
-            <div class="button-logo-container">
-              <button id="button" onclick="liveDashboard()">
-                View Project
-              </button>
-              <div class="skill-img">
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                  alt="skill logo"
-                />
-                +
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1726482744/SQL_Logo_iztbna-removebg-preview_pqg3qf.png"
-                  alt="skill logo"
-                />
-              </div>
-            </div>
-          </div>
-          <div id="live-dashboard2" class="dashboard-main">
-            <div class="live-dashboard-container">
-              <i
-                class="fa-solid fa-xmark close-icon"
-                onclick="closeDashboard()"
-              ></i>
-              <h1>
-                Festive Campaign Analysis
-                <br class="img-br" />
-
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1725383000/Microsoft-Power-BI-Logo-2013_gelnwa.png"
-                  alt="skill logo"
-                  class="logo-skill"
-                />
-                +
-                <img
-                  src="../res.cloudinary.com/dffu1ungl/image/upload/v1726482744/SQL_Logo_iztbna-removebg-preview_pqg3qf.png"
-                  alt=""
-                  class="logo-skill"
-                />
-              </h1>
-              <hr class="hr-line" />
-              <p class="main-descirption">
-                Analyzed data from Diwali and Sankranti promotions using SQL and
-                PowerBI. I uncovered which promotions worked best, increased
-                sales significantly, and identified top-performing products.
-              </p>
-
-              <div class="project-details-container">
-                <div class="details-content">
-                  <h1>Project Details</h1>
-                  <p>
-                    Atliq Mart, with over 50 supermarkets, needed insights to
-                    analyze the impact of their festive promotions during Diwali
-                    and Sankranti.
-                  </p>
-                  <p>
-                    Atliq Mart, with over 50 supermarkets, needed insights to
-                    analyze the impact of their festive promotions during Diwali
-                    and Sankranti.
-                  </p>
-                  <p>
-                    I created a "sales summary" view and built interactive Power
-                    BI dashboards to visualize trends, assess product
-                    performance, and measure promotion impact. This allowed for
-                    real-time analysis of sales and customer engagement.
-                  </p>
-                  <p>
-                    Sales increased by 107.64% during Diwali and 113.58% during
-                    Sankranti. The analysis provided strategic insights into
-                    top-performing products, driving future data-driven
-                    marketing decisions.
-                  </p>
-                </div>
-                <div class="presentation-container">
-                  <h1>Presentation Video</h1>
-                  <iframe
-                    class="video-frame"
-                    src="https://www.youtube.com/embed/m4qr9eKvrhM?si=xlfwvjsYsdBD4uqY"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
-                </div>
-              </div>
-
-              <h1 class="live-dashboard-heading">Live Dashboard</h1>
-              <iframe
-                src="https://app.powerbi.com/view?r=eyJrIjoiNmRjZWRjNTgtZTYzYS00MzUyLThmNjItNzA3YzhhZDllYTQwIiwidCI6ImM2ZTU0OWIzLTVmNDUtNDAzMi1hYWU5LWQ0MjQ0ZGM1YjJjNCJ9"
-                frameborder="0"
-                width="100%"
-                height="800"
-                class="frame-rate"
-              ></iframe>
-              <div class="project-view-container">
-                <a
-                  href="https://www.linkedin.com/posts/pradeep-m-analyst_dataanalytics-sqlproject-powerbi-activity-7164120449143046144-4fAw/?utm_source=share&amp;utm_medium=member_desktop"
-                  class="linkedin-engagement"
-                  target="_blank"
-                  ><i class="fa-brands fa-linkedin dashboard-icon1"></i>View
-                  Project Engagement</a
-                >
-
-                <a
-                  href="https://github.com/pradeep-the-analyst/Atliq-mart"
-                  class="githun-repo"
-                  target="_blank"
-                  ><i class="fa-brands fa-github dashboard-icon2"></i>View
-                  Project on GitHUB</a
-                >
-              </div>
-            </div>
-          </div> -->
-        <!-- </div>
-      </div> -->
-      <!--<a href="#contact"><i class="fa-solid fa-angles-down arrow-icon"></i></a>-->
-    </section>
-
-    <section id="certificate" class="certificate-container">
-      <div class="headings">
-        <p class="headings-para">My</p>
-        <h1 class="section-heading">Blogs</h1>
-      </div>
-      <div class="certificate-card-container">
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/classification-in-data-mining-a-comprehensive-overview-9d95692f3d66"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog1\SVM.png"
-              alt=""
-            />
-            <p class="certificate-name">Classification in Data Mining: Overview</p>
-          </a>
-        </div>
-
-        <div class="certificate-card certifi-2">
-          <a
-            href="https://medium.com/@BetterCallAwais/frequent-pattern-analysis-using-association-rule-mining-b9536c2d6d77"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog2\Freq.png"
-              alt=""
-            />
-            <p class="certificate-name">Frequent Pattern Analysis using Association Rule Mining</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-3">
-          <a
-            href="../res.cloudinary.com/dffu1ungl/image/upload/v1725467189/Power_BI_Data_Analytics_for_all_Level_2.O_wkiqby.png"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog3\cluster.png"
-              alt=""
-            />
-            <p class="certificate-name">
-              Cluster Analysis in Data Mining: A Comprehensive Guide
+          <div class="hero__meta" data-parallax="-0.1">
+            <p class="hero__role" data-reveal data-reveal-delay="2">
+              Business Intelligence Analyst
             </p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/introduction-to-data-mining-and-basic-concepts-18ef09470eab"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog4\Data Mining.png"
-              alt=""
-            />
-            <p class="certificate-name">
-              Introduction to Data Mining and Basic Concepts
+            <p class="hero__line" data-reveal data-reveal-delay="3">
+              I build semantic models, ETL pipelines and dashboards.
+              Currently at <span class="u">Beaconhouse Group</span>.
             </p>
-          </a>
-        </div>
+            <div class="hero__actions" data-reveal data-reveal-delay="4">
+              <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
+              <a class="btn btn--line" href="#projects">Projects</a>
+            </div>
+          </div>
 
-        <div class="certificate-card certifi-2">
-          <a
-            href="https://medium.com/@BetterCallAwais/revisiting-statistics-database-management-systems-dbms-647a191eb253"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog5\DBMS.png"
-              alt=""
-            />
-            <p class="certificate-name">Revisiting Statistics & Database Management Systems (DBMS)</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-3">
-          <a
-            href="https://medium.com/@BetterCallAwais/understanding-data-warehousing-and-online-analytical-processing-olap-058b4389cbe1"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog7\OLAP.png"
-              alt=""
-            />
-            <p class="certificate-name">Understanding Data Warehousing and Online Analytical Processing (OLAP)</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog6\DataCube.png"
-              alt=""
-            />
-            <p class="certificate-name">Data Cube : Backbone of Multidimensional Analysis</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/outlier-detection-in-data-mining-techniques-applications-b9fd3d0dad1f"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog8\Outlier.png"
-              alt=""
-            />
-            <p class="certificate-name">Outlier Detection in Data Mining: Techniques & Applications</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/dimensionality-reduction-techniques-in-data-mining-680e7f74afd7"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog9\Dimensionality.png"
-              alt=""
-            />
-            <p class="certificate-name">Dimensionality Reduction Techniques</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/time-series-analysis-techniques-applications-and-challenges-e1b984142c0f"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog10\time.png"
-              alt=""
-            />
-            <p class="certificate-name">Time Series Analysis</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog11\txtM.png"
-              alt=""
-            />
-            <p class="certificate-name">Text Mining and Natural Language Processing (NLP)</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog12\BDADM.png"
-              alt=""
-            />
-            <p class="certificate-name">Big Data and Data Mining</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog13\NN.png"
-              alt=""
-            />
-            <p class="certificate-name">Neural Networks in Data Mining</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog14\Ensemble.png"
-              alt=""
-            />
-            <p class="certificate-name">Ensemble Learning Techniques</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog15\Reg.png"
-              alt=""
-            />
-            <p class="certificate-name">Regression Analysis</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog16\Viz.png"
-              alt=""
-            />
-            <p class="certificate-name">Data Visualization Techniques</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog17\EI.png"
-              alt=""
-            />
-            <p class="certificate-name">Ethical Issues in Data Mining</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog18\RT.png"
-              alt=""
-            />
-            <p class="certificate-name">Real-Time Data Mining</p>
-          </a>
-        </div>
-        <div class="certificate-card certifi-1">
-          <a
-            href="https://medium.com/@BetterCallAwais/data-cube-backbone-of-multidimensional-analysis-8820d4d1453a"
-            target="_blank"
-          >
-            <img
-              src="blogs\Blog19\GM.png"
-              alt=""
-            />
-            <p class="certificate-name">Graph Mining</p>
-          </a>
-        </div>
-      </div>
-      <!--<a href="#project"><i class="fa-solid fa-angles-down arrow-icon"></i></a>-->
-    </section>
-
-    <section id="contact" class="contact">
-      <div class="headings">
-        <p class="headings-para">Get in Touch</p>
-        <h1 class="section-heading">Contact Me</h1>
-      </div>
-
-      <div class="form-content-container">
-        <div class="form-content">
-          <h1>Let's Connect</h1>
-          <p>
-            I’m a data analyst passionate about solving problems and helping
-            others grow.
-          </p>
-          <div class="social-media-icons">
-            <!-- <a
-              href="https://www.linkedin.com/in/awais-ali-b0b19b226/"
-              target="_blank"
-              class="topmate certifi-3  "
-              ><img src="../res.cloudinary.com/dffu1ungl/image/upload/v1725256003/linkedin.png"/></i>
-            </a>
-            <a
-              href="mailto:ds.awaisali@gmail.com"
-              target="_blank"
-              class="topmate certifi-3"
-              ><img src="../res.cloudinary.com/dffu1ungl/image/upload/v1725256003/mail.png"/></a> -->
-            <script
-              src="../topmate-embed.s3.ap-south-1.amazonaws.com/v1/topmate-embed.js"
-              user-profile="https://topmate.io/embed/profile/pradeep_analyst?theme=ffbb38"
-              btn-style='{"backgroundColor":"#000","color":"#fff","border":"1px solid #000"}'
-              embed-version="v1"
-              button-text="Let's Connect"
-              position-right="30px"
-              position-bottom="30px"
-              custom-padding="0px"
-              custom-font-size="16px"
-              custom-font-weight="500"
-              custom-width="200px"
-              async=""
-              defer=""
-            ></script>
-            <a href="https://www.linkedin.com/in/awais-ali-b0b19b226/"><img
-              src="images\linkedin.png"
-              alt="topmate logo"
-              class="topmate certifi-3"
-              id="linkedin"
-            /></a>
+          <div class="hero__portrait" data-parallax="0.22">
+            <div class="portrait lg" data-tilt data-tilt-max="10">
+              <picture>
+                <source srcset="images/awais.webp" type="image/webp" />
+                <img src="images/awais.jpg" alt="Awais Ali" width="900" height="900" fetchpriority="high" />
+              </picture>
+            </div>
           </div>
         </div>
 
-        <form action="https://api.web3forms.com/submit" method="POST">
-          <input
-            type="hidden"
-            name="access_key"
-            value="195781f0-c000-48a4-9585-8994d39d2ff7"
-          />
+        <div class="hero__rail" aria-hidden="true">
+          <span class="mono">3+ yrs</span><i></i>
+          <span class="mono">Power BI</span><i></i>
+          <span class="mono">BigQuery</span><i></i>
+          <span class="mono">SQL</span><i></i>
+          <span class="mono">Python</span>
+        </div>
+      </section>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Your Name"
-            required
-            class="input-style"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter Your Mail Id"
-            required
-            class="input-style"
-          />
+      <!-- ── About ─────────────────────────────────────────── -->
+      <section id="about" class="section">
+        <div class="wrap grid-2">
+          <div class="col-label"><span class="mono">01</span><span class="mono">About</span></div>
+          <div class="col-body">
+            <p class="big" data-reveal>
+              I work between source systems and the people who need an answer by Monday.
+            </p>
+            <p data-reveal data-reveal-delay="1">
+              Star-schema models, DAX and SQL, automated ETL in BigQuery and Power Query.
+              Across education, marketing, e-commerce, finance and supply chain.
+            </p>
 
-          <input
-            type="text"
-            name="subject"
-            placeholder="Enter Subject Of The Mail"
-            required
-            class="input-style"
-          />
+            <dl class="facts" data-reveal data-reveal-delay="2">
+              <div><dt>Role</dt><dd>Assistant Manager, BI</dd></div>
+              <div><dt>Company</dt><dd>Beaconhouse Group</dd></div>
+              <div><dt>Degree</dt><dd>BS Artificial Intelligence, UMT</dd></div>
+              <div><dt>Open to</dt><dd>On-site · Hybrid · Remote</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
 
-          <textarea
-            name="message"
-            cols="30"
-            rows="6"
-            placeholder="Enter Your Message Here"
-          ></textarea>
-          <button type="submit" class="submit-button">
-            SUBMIT <i class="fa-solid fa-paper-plane icon-plane"></i>
-          </button>
-        </form>
-      </div>
+      <!-- ── 3D star schema ────────────────────────────────── -->
+      <section class="schema">
+        <div class="wrap schema__wrap">
+          <canvas id="schema-canvas" class="schema__canvas" aria-label="Rotating 3D star schema model" role="img"></canvas>
+          <div class="schema__cap">
+            <span class="mono">Star schema</span>
+            <p>Fact table at the centre, conformed dimensions around it. Drag to rotate.</p>
+          </div>
+        </div>
+      </section>
 
-      <a href="#home"><i class="fa-solid fa-angles-up arrow-icon"></i></a>
-    </section>
+      <!-- ── Work ──────────────────────────────────────────── -->
+      <section id="work" class="section">
+        <div class="wrap grid-2">
+          <div class="col-label"><span class="mono">02</span><span class="mono">Work</span></div>
+          <div class="col-body">
+            <ol class="roles">
+              <li class="role lg" data-reveal data-tilt data-tilt-max="3">
+                <div class="role__head">
+                  <h2>Assistant Manager, Business Intelligence</h2>
+                  <span class="mono role__when">2025 — now</span>
+                </div>
+                <p class="role__org">Beaconhouse Group · Lahore</p>
+                <ul class="terse">
+                  <li>BI pipelines across Looker Studio and Power BI.</li>
+                  <li>Automated ETL in BigQuery, Python and Power Query — <b>40% less</b> manual reporting.</li>
+                  <li>Governance, documentation, mentoring analysts.</li>
+                </ul>
+              </li>
+
+              <li class="role lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="3">
+                <div class="role__head">
+                  <h2>Business Intelligence Developer</h2>
+                  <span class="mono role__when">2023 — 2025</span>
+                </div>
+                <p class="role__org">Kaswa.Ai · Remote</p>
+                <ul class="terse">
+                  <li>Power BI dashboards with drill-through and advanced DAX.</li>
+                  <li>Query and pipeline optimisation — <b>35% faster</b> analysis.</li>
+                  <li>Ad-hoc SQL analysis for non-technical stakeholders.</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Stack ─────────────────────────────────────────── -->
+      <section id="stack" class="section">
+        <div class="wrap grid-2">
+          <div class="col-label"><span class="mono">03</span><span class="mono">Stack</span></div>
+          <div class="col-body">
+            <div class="stack">
+              <div class="stack__row" data-reveal>
+                <span class="mono stack__k">Visualisation</span>
+                <p>Power BI · Looker Studio · Excel</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="1">
+                <span class="mono stack__k">Modeling</span>
+                <p>Star schema · Fact &amp; dimension · Semantic models · KPI design</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="2">
+                <span class="mono stack__k">Languages</span>
+                <p>SQL · Python · DAX · Power Query (M)</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="3">
+                <span class="mono stack__k">Data</span>
+                <p>SQL Server · MySQL · BigQuery · GCP</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="4">
+                <span class="mono stack__k">Pipelines</span>
+                <p>Microsoft Fabric · SSIS · Power Query · Warehousing</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="5">
+                <span class="mono stack__k">Production</span>
+                <p>Time intelligence · Row-level security · Scheduled refresh · Gateways</p>
+              </div>
+              <div class="stack__row" data-reveal data-reveal-delay="6">
+                <span class="mono stack__k">Certified</span>
+                <p>Power BI Essential · DAX Modeling · Microsoft Fabric · SQL Server · SSIS</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Projects ──────────────────────────────────────── -->
+      <section id="projects" class="section">
+        <div class="wrap">
+          <div class="grid-2">
+            <div class="col-label"><span class="mono">04</span><span class="mono">Projects</span></div>
+            <div class="col-body"><p class="big" data-reveal>Six builds. Live report where it's publicly shareable.</p></div>
+          </div>
+
+          <div class="projects">
+            <article class="pc lg" data-reveal data-tilt data-tilt-max="7"
+              data-title="Customer Support / Call Centre"
+              data-stack="Power BI · DAX"
+              data-embed="https://app.powerbi.com/view?r=eyJrIjoiNWUzYTI1NTYtODA4ZS00NmU0LTk4MjMtOWIzZmY3ZjA2NmE4IiwidCI6IjRhYTNlNzM3LTdjZjUtNDM4Ni1hMjM5LWI1Y2VkY2Q2MjVmMSIsImMiOjl9">
+              <div class="pc__media"><img src="images/projects/customer support.png" alt="" loading="lazy" data-depth="18" /></div>
+              <div class="pc__body">
+                <h3 data-depth="26">Customer Support / Call Centre</h3>
+                <p data-depth="20">Handle time, first-call resolution, abandonment, agent scorecards.</p>
+                <div class="pc__foot" data-depth="30">
+                  <span class="mono">Power BI · DAX</span>
+                  <span class="dot dot--live"></span>
+                </div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Star-schema model with a dedicated date dimension driving time intelligence.</li>
+                  <li>DAX layer for rolling averages, YoY deltas and target variance.</li>
+                  <li>Drill-through from team scorecard to individual agent.</li>
+                  <li>Replaced a monthly spreadsheet review with a live report.</li>
+                </ul>
+              </template>
+            </article>
+
+            <article class="pc lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="7"
+              data-title="E-commerce &amp; Finance"
+              data-stack="Power BI · SQL · Power Query">
+              <div class="pc__media"><img src="images/projects/ecom.png" alt="" loading="lazy" data-depth="18" /></div>
+              <div class="pc__body">
+                <h3 data-depth="26">E-commerce &amp; Finance</h3>
+                <p data-depth="20">Revenue, conversion, retention and AOV in one certified model.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · SQL</span></div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Joined storefront behaviour to finance outcomes in a single model.</li>
+                  <li>Preserved query folding — <b>30% faster</b> refresh.</li>
+                  <li>Consolidated duplicate sales and finance measures into one certified table.</li>
+                </ul>
+              </template>
+            </article>
+
+            <article class="pc lg" data-reveal data-reveal-delay="2" data-tilt data-tilt-max="7"
+              data-title="Healthcare Operations"
+              data-stack="Power BI · DAX">
+              <div class="pc__media"><img src="images/projects/HC.png" alt="" loading="lazy" data-depth="18" /></div>
+              <div class="pc__body">
+                <h3 data-depth="26">Healthcare Operations</h3>
+                <p data-depth="20">Admissions, length of stay, bed occupancy, outcomes.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · DAX</span></div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Occupancy against capacity with early-warning thresholds.</li>
+                  <li>Length of stay by department, trended.</li>
+                  <li>Layout answers "are we okay?" before "why?".</li>
+                </ul>
+              </template>
+            </article>
+
+            <article class="pc pc--art lg" data-reveal data-tilt data-tilt-max="7"
+              data-title="Supply Chain Analytics" data-stack="Power BI · SQL · DAX">
+              <div class="pc__media">
+                <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
+                  <g class="art-stroke"><path d="M20 210h360M20 160h360M20 110h360M20 60h360" /></g>
+                  <g class="art-fill">
+                    <rect x="46" y="182" width="30" height="28" rx="5" /><rect x="112" y="130" width="30" height="80" rx="5" />
+                    <rect x="178" y="158" width="30" height="52" rx="5" /><rect x="244" y="86" width="30" height="124" rx="5" />
+                    <rect x="310" y="46" width="30" height="164" rx="5" />
+                  </g>
+                </svg>
+              </div>
+              <div class="pc__body">
+                <h3 data-depth="26">Supply Chain Analytics</h3>
+                <p data-depth="20">Delivery and logistics KPIs on a conformed model.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · SQL</span></div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Conformed dimensions across shipments, routes and vendors.</li>
+                  <li>On-time delivery, dwell time, cost per shipment against target.</li>
+                  <li>ETL and query tuning — <b>30% lower</b> latency.</li>
+                </ul>
+              </template>
+            </article>
+
+            <article class="pc pc--art lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="7"
+              data-title="Digital Marketing Attribution" data-stack="Power BI · Python">
+              <div class="pc__media">
+                <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
+                  <g class="art-fill">
+                    <path d="M64 46h272l-38 44H102z" /><path d="M106 100h188l-32 44H138z" /><path d="M144 154h112l-26 44h-60z" />
+                  </g>
+                  <g class="art-stroke"><circle cx="200" cy="122" r="108" /><circle cx="200" cy="122" r="82" /></g>
+                </svg>
+              </div>
+              <div class="pc__body">
+                <h3 data-depth="26">Digital Marketing Attribution</h3>
+                <p data-depth="20">Multi-touch attribution replacing last-click.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · Python</span></div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Attribution modelled in Python, surfaced in Power BI.</li>
+                  <li>Channel performance by assisted conversion, not last touch.</li>
+                  <li>Spend reallocated toward channels that actually convert.</li>
+                </ul>
+              </template>
+            </article>
+
+            <article class="pc pc--art lg" data-reveal data-reveal-delay="2" data-tilt data-tilt-max="7"
+              data-title="Sales Performance &amp; Trend" data-stack="Python · SQL">
+              <div class="pc__media">
+                <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
+                  <path class="art-line" d="M20 196c40-10 60 18 100-10s60-86 100-66 60 86 160 18" />
+                  <g class="art-fill"><circle cx="120" cy="186" r="6" /><circle cx="220" cy="120" r="6" /><circle cx="320" cy="160" r="6" /></g>
+                </svg>
+              </div>
+              <div class="pc__body">
+                <h3 data-depth="26">Sales Performance &amp; Trend</h3>
+                <p data-depth="20">Seasonality isolated from trend, then automated.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono">Python · SQL</span></div>
+              </div>
+              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <template class="pc__detail">
+                <ul class="terse">
+                  <li>Historical decomposition separating seasonal pattern from real trend.</li>
+                  <li>Python scripts re-run the analysis on schedule.</li>
+                  <li>Feeds standing performance monitoring, not a slide deck.</li>
+                </ul>
+              </template>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Contact ───────────────────────────────────────── -->
+      <section id="contact" class="section">
+        <div class="wrap grid-2">
+          <div class="col-label"><span class="mono">05</span><span class="mono">Contact</span></div>
+          <div class="col-body">
+            <p class="big" data-reveal>Open to BI and Data Analyst roles.</p>
+
+            <ul class="direct" data-reveal data-reveal-delay="1">
+              <li><span class="mono">Email</span><a href="mailto:ds.awaisali@gmail.com">ds.awaisali@gmail.com</a></li>
+              <li><span class="mono">LinkedIn</span><a href="https://www.linkedin.com/in/awaisali-bi" target="_blank" rel="noopener">/in/awaisali-bi</a></li>
+              <li><span class="mono">Phone</span><a href="tel:+923064086446">+92 306 4086446</a></li>
+            </ul>
+
+            <form
+              class="form lg"
+              id="contact-form"
+              name="contact"
+              method="POST"
+              action="/"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              data-reveal
+              data-reveal-delay="2"
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+              <div class="field">
+                <input type="text" id="f-name" name="name" required placeholder=" " autocomplete="name" />
+                <label for="f-name">Name</label>
+              </div>
+              <div class="field">
+                <input type="email" id="f-email" name="email" required placeholder=" " autocomplete="email" />
+                <label for="f-email">Email</label>
+              </div>
+              <div class="field">
+                <textarea id="f-message" name="message" rows="4" required placeholder=" "></textarea>
+                <label for="f-message">Message</label>
+              </div>
+
+              <button type="submit" class="btn btn--solid" id="submit-btn"><span class="btn__label">Send</span></button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <footer class="footer">
-      <!-- <div class="footer-container">
-        <h2>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSf7F9AOQyc4X3r1JtOmd3SVf5agnY55RKQg-4upBV_j2Q4i_w/viewform?usp=sf_link"
-            target="_blank"
-            class="get-yours"
-            >Get Your Custom Portfolio Website</a
-          >
-        </h2>
-      </div> -->
-      <div class="contact-link">
-        <h2>
-          Developed by
-          <a
-            href="https://www.linkedin.com/in/awais-ali-b0b19b226/"
-            target="_blank"
-            class="tooltip"
-            >Awais Ali
-            <span class="tooltiptext">Let's connect on LinkedIn</span></a
-          >
-        </h2>
+      <div class="wrap footer__inner">
+        <span class="mono">© <span id="year">2026</span> Awais Ali</span>
+        <a href="#top" class="mono">Top ↑</a>
       </div>
     </footer>
 
-    <script src="https://unpkg.com/scrollreveal"></script>
+    <!-- ── Case-study modal ────────────────────────────────── -->
+    <div class="modal" id="modal" hidden>
+      <div class="modal__scrim" data-close></div>
+      <div class="modal__panel lg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="icon-btn modal__close" type="button" data-close>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          <span class="sr-only">Close</span>
+        </button>
+        <span class="mono" id="modal-stack"></span>
+        <h2 id="modal-title"></h2>
+        <div id="modal-body"></div>
+        <div class="modal__embed" id="modal-embed"></div>
+      </div>
+    </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
-
-<!-- Mirrored from pradeep-m-portfolio.netlify.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 28 Jan 2025 12:52:05 GMT -->
 </html>
