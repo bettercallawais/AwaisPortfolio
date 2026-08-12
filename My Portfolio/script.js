@@ -29,6 +29,36 @@ const motion = {
 
 const scenes = [];
 
+/* ── Tab title ─────────────────────────────────────────────
+   Switch away having spent under ten seconds here and the tab
+   calls it out; stay longer and it just keeps the name. Coming
+   back always restores the name.
+
+   Time is accumulated across visits rather than measured per
+   segment, so someone who has already read the page doesn't get
+   the quip for a three-second glance away later.               */
+(() => {
+  const BASE = 'Awais Ali | BI Analyst';
+  const QUICK = 'That was quick';
+  const THRESHOLD = 10_000;
+
+  let since = document.visibilityState === 'visible' ? performance.now() : null;
+  let engaged = 0;
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (since !== null) {
+        engaged += performance.now() - since;
+        since = null;
+      }
+      document.title = engaged < THRESHOLD ? QUICK : BASE;
+    } else {
+      since = performance.now();
+      document.title = BASE;
+    }
+  });
+})();
+
 /* ── Theme ─────────────────────────────────────────────────── */
 (() => {
   const btn = $('#theme-toggle');
