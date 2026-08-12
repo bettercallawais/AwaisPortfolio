@@ -94,6 +94,7 @@ body {
   line-height: 1.58;
   letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
   overflow-x: clip;
   transition: background 0.45s var(--ease), color 0.45s var(--ease);
 }
@@ -188,6 +189,41 @@ p { text-wrap: pretty; }
 /* Content above the sheen (z1), below the rim (z2, painted last). */
 .lg > * { position: relative; z-index: 2; }
 
+/* ── Preloader ─────────────────────────────────────────────
+   Held ~2s so it reads as intentional, hard-capped at 3s in JS. */
+.preloader {
+  position: fixed; inset: 0; z-index: 400;
+  display: grid; place-items: center;
+  background: var(--bg);
+  transition: opacity 0.6s var(--ease), visibility 0.6s;
+}
+.preloader.is-done { opacity: 0; visibility: hidden; }
+/* Gives the glass panel something to actually refract. */
+.preloader::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(58% 42% at 50% 46%, var(--accent-soft), transparent 70%);
+}
+.preloader__box {
+  display: grid; justify-items: center; gap: 0.85rem;
+  padding: 1.5rem 2rem;
+}
+.preloader__mark {
+  font-size: 1.3rem; font-weight: 600; letter-spacing: -0.05em;
+  color: var(--accent);
+}
+.preloader__bar {
+  width: 148px; height: 2px; border-radius: 99px;
+  background: var(--line); overflow: hidden;
+}
+.preloader__bar i {
+  display: block; height: 100%; width: 0;
+  background: var(--accent);
+  transition: width 2.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.preloader__cap { font-size: 0.6rem; }
+body.is-loading { overflow: hidden; }
+
 /* ── Progress ──────────────────────────────────────────────── */
 .progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 130; pointer-events: none; }
 .progress span { display: block; height: 100%; width: 0%; background: var(--accent); }
@@ -209,16 +245,19 @@ p { text-wrap: pretty; }
   border-radius: 999px;
 }
 
-.brand {
-  display: flex; align-items: center; gap: 0.5rem;
-  margin-right: auto; padding-left: 0.4rem;
-  font-weight: 500; font-size: 0.92rem; letter-spacing: -0.025em;
-}
+/* Monogram only — the hero already says the name, so repeating it
+   in the bar just reads as duplication. */
+.brand { display: flex; align-items: center; margin-right: auto; }
 .brand__mark {
-  width: 8px; height: 8px; border-radius: 50%;
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--accent-ink);
   background: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  transition: transform 0.4s var(--ease-glass);
 }
+.brand:hover .brand__mark { transform: rotate(-6deg) scale(1.07); }
 
 .nav__list { position: relative; display: flex; align-items: center; gap: 0.05rem; list-style: none; padding: 0; margin: 0; }
 .nav__list a {
@@ -275,13 +314,15 @@ html[data-motion="reduced"] .i-still { opacity: 1; transform: none; }
 .nav__burger[aria-expanded="true"] span:nth-child(2) { transform: translateY(-2.75px) rotate(-45deg); }
 
 /* ── Hero ──────────────────────────────────────────────────
-   Editorial anchor: metadata at the top, the name set large on
-   the baseline at the bottom, facts on a rule beneath it.      */
+   Two columns, vertically centred: copy left, portrait right.
+   The top padding clears the floating header by a wide margin so
+   nothing can ever sit beneath it.                              */
 .hero {
   position: relative;
   min-height: 100svh;
-  display: flex; flex-direction: column;
-  padding: calc(var(--nav-h) + 3.2rem) 0 clamp(1.75rem, 4vw, 3rem);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding: calc(var(--nav-h) + 4.5rem) 0 clamp(2rem, 5vw, 3.5rem);
   overflow: clip;
 }
 .hero__canvas {
@@ -301,51 +342,76 @@ html[data-motion="reduced"] .i-still { opacity: 1; transform: none; }
   position: relative;
   width: min(var(--wrap), 100% - var(--gutter) * 2);
   margin-inline: auto;
-  flex: 1;
-  display: flex; flex-direction: column; justify-content: space-between;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
 }
 
-.hero__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
+/* min-width:0 keeps long words from blowing the grid column open. */
+.hero__lead { min-width: 0; }
 
-.kicker { display: grid; gap: 0.3rem; max-width: 24ch; }
-.kicker b { font-weight: 500; font-size: 0.9rem; letter-spacing: -0.02em; color: var(--text); }
-
-.hero__portrait { width: clamp(88px, 11vw, 132px); flex: none; }
-.portrait { aspect-ratio: 1; border-radius: 50%; overflow: hidden; padding: 4px; }
-.portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
-.hero__bottom { display: grid; gap: clamp(1.1rem, 2.5vw, 1.75rem); }
+.kicker {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.38rem 0.85rem 0.38rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--mono); font-size: 0.655rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.pip {
+  width: 6px; height: 6px; border-radius: 50%; flex: none;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-soft);
+  animation: pulse 2.2s var(--ease) infinite;
+}
 
 .hero__name {
-  font-size: clamp(3.1rem, 17.4vw, 15.4rem);
-  font-weight: 500;
-  line-height: 0.84;
-  letter-spacing: -0.055em;
-  white-space: nowrap;
+  margin-top: clamp(1rem, 2.4vw, 1.5rem);
+  font-size: clamp(2.65rem, 1.9rem + 3.5vw, 4.9rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
   overflow: hidden;
   padding-bottom: 0.06em;
 }
 .hero__name .char {
   display: inline-block;
   transform: translateY(102%);
-  animation: charIn 1s var(--ease) forwards;
-  animation-delay: calc(var(--i) * 40ms + 120ms);
+  animation: charIn 0.95s var(--ease) forwards;
+  animation-delay: calc(var(--i) * 38ms + 60ms);
+  animation-play-state: paused; /* released when the preloader clears */
 }
-.hero__name .char.space { width: 0.22em; }
+.hero__name .char.space { width: 0.24em; }
+body.is-ready .hero__name .char { animation-play-state: running; }
 @keyframes charIn { to { transform: none; } }
 
-.hero__facts {
+.hero__role {
+  margin-top: 0.45rem;
+  font-size: clamp(1rem, 0.94rem + 0.45vw, 1.28rem);
+  font-weight: 400; letter-spacing: -0.022em;
+  color: var(--accent);
+}
+.hero__blurb { margin-top: 1rem; max-width: 46ch; color: var(--muted); }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: clamp(1.4rem, 3vw, 1.9rem); }
+
+.hero__figure { justify-self: center; width: min(100%, 335px); }
+.portrait { aspect-ratio: 1; border-radius: var(--r-xl); overflow: hidden; padding: 6px; }
+.portrait img {
+  width: 100%; height: 100%; object-fit: cover;
+  border-radius: calc(var(--r-xl) - 6px);
+}
+
+.hero__stripwrap { width: min(var(--wrap), 100% - var(--gutter) * 2); margin-inline: auto; }
+.hero__meta {
+  margin: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1.1rem 1.75rem;
-  padding-top: clamp(1rem, 2vw, 1.5rem);
-  border-top: 1px solid var(--line);
-  align-items: start;
+  gap: 1rem 1.6rem;
+  padding: 1.15rem 1.35rem;
 }
-.hero__facts div { display: grid; gap: 0.28rem; }
-.hero__facts p { font-size: 0.92rem; line-height: 1.4; }
-.hero__cta { display: flex; gap: 0.5rem; align-items: center; }
+.hero__meta div { display: grid; gap: 0.25rem; }
+.hero__meta dd { margin: 0; font-size: 0.9rem; line-height: 1.35; }
 
 /* ── Buttons ───────────────────────────────────────────────── */
 .btn {
@@ -614,16 +680,36 @@ html[data-motion="reduced"] .i-still { opacity: 1; transform: none; }
   .schema__cap { position: static; margin-top: 0.9rem; max-width: none; }
 }
 
-@media (max-width: 620px) {
-  .hero { padding-top: calc(var(--nav-h) + 2rem); }
-  .hero__top { align-items: center; }
-  .hero__facts { grid-template-columns: 1fr 1fr; }
-  .hero__cta { grid-column: 1 / -1; }
-  .stack__row, .direct li { grid-template-columns: 1fr; gap: 0.22rem; }
-  .modal__embed iframe { min-height: 270px; }
+/* Portrait moves above the copy once the two columns stop fitting. */
+@media (max-width: 900px) {
+  .hero { padding-top: calc(var(--nav-h) + 3rem); }
+  .hero__inner { grid-template-columns: 1fr; gap: clamp(1.6rem, 5vw, 2.25rem); }
+  .hero__figure { order: -1; justify-self: start; width: min(44vw, 170px); }
+  .hero__name { margin-top: 0.9rem; }
 }
 
-@media (hover: none) { .lg::before { display: none; } }
+@media (max-width: 620px) {
+  .hero { padding-top: calc(var(--nav-h) + 2.25rem); }
+  .hero__meta { grid-template-columns: 1fr 1fr; gap: 0.9rem 1.1rem; padding: 1rem 1.1rem; }
+  .hero__blurb { max-width: none; }
+  .hero__cta .btn { flex: 1 1 auto; }
+  .stack__row, .direct li { grid-template-columns: 1fr; gap: 0.22rem; }
+  .modal__embed iframe { min-height: 270px; }
+  .role__head { gap: 0.3rem; }
+  .footer__inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+
+@media (max-width: 400px) {
+  .hero__meta { grid-template-columns: 1fr; }
+}
+
+@media (hover: none) {
+  .lg::before { display: none; }
+  /* Comfortable touch targets */
+  .icon-btn { width: 42px; height: 42px; }
+  .btn { padding: 0.72rem 1.35rem; }
+  .direct a, .footer a { padding-block: 0.15rem; }
+}
 
 /* ── Motion preference ─────────────────────────────────────
    Strips travel only — scroll hijack, parallax, entrance slides,
@@ -636,9 +722,11 @@ html[data-motion="reduced"] .dot--live { animation: none; }
 html[data-motion="reduced"] .pc__media img,
 html[data-motion="reduced"] [data-depth],
 html[data-motion="reduced"] .btn { transition-duration: 0.14s; }
+html[data-motion="reduced"] .preloader__bar i { transition-duration: 0.2s; }
+html[data-motion="reduced"] .pip { animation: none; }
 
 @media print {
-  .header, .progress, .modal, .hero__canvas, .schema { display: none !important; }
+  .header, .progress, .modal, .hero__canvas, .schema, .preloader { display: none !important; }
   body { background: #fff; color: #000; }
   .section { padding-block: 1.2rem; }
   .lg { background: none; box-shadow: none; border: 1px solid #ccc; }

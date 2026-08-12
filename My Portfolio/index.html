@@ -78,14 +78,22 @@
       </filter>
     </svg>
 
+    <!-- ── Preloader ───────────────────────────────────────── -->
+    <div class="preloader" id="preloader" role="status" aria-label="Loading">
+      <div class="preloader__box lg">
+        <span class="preloader__mark">AA</span>
+        <span class="preloader__bar"><i id="preloader-fill"></i></span>
+        <span class="mono preloader__cap">Business Intelligence</span>
+      </div>
+    </div>
+
     <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
 
     <!-- ── Header ──────────────────────────────────────────── -->
     <header class="header" id="header">
       <nav class="nav lg" aria-label="Primary">
-        <a href="#top" class="brand">
-          <span class="brand__mark" aria-hidden="true"></span>
-          Awais Ali
+        <a href="#top" class="brand" aria-label="Awais Ali — back to top">
+          <span class="brand__mark" aria-hidden="true">AA</span>
         </a>
 
         <ul class="nav__list" id="nav-list">
@@ -123,43 +131,44 @@
         <div class="hero__wash" aria-hidden="true"></div>
 
         <div class="hero__inner">
-          <div class="hero__top" data-parallax="-0.06">
-            <div class="kicker" data-reveal>
-              <span class="mono">Lahore, Pakistan</span>
-              <b>Available for BI &amp; Data Analyst roles</b>
-            </div>
-            <div class="hero__portrait" data-reveal data-reveal-delay="1">
-              <div class="portrait lg" data-tilt data-tilt-max="12">
-                <picture>
-                  <source srcset="images/awais.webp" type="image/webp" />
-                  <img src="images/awais.jpg" alt="Awais Ali" width="880" height="880" fetchpriority="high" />
-                </picture>
-              </div>
+          <div class="hero__lead">
+            <p class="kicker" data-reveal>
+              <span class="pip" aria-hidden="true"></span>
+              Available for BI &amp; Data Analyst roles
+            </p>
+
+            <h1 class="hero__name" data-reveal data-reveal-delay="1"><span data-split>Awais Ali</span></h1>
+
+            <p class="hero__role" data-reveal data-reveal-delay="2">Business Intelligence Analyst</p>
+
+            <p class="hero__blurb" data-reveal data-reveal-delay="3">
+              I build semantic models, ETL pipelines and dashboards — currently at
+              Beaconhouse Group in Lahore.
+            </p>
+
+            <div class="hero__cta" data-reveal data-reveal-delay="4">
+              <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+              <a class="btn btn--line" href="#projects">View projects</a>
             </div>
           </div>
 
-          <div class="hero__bottom">
-            <h1 class="hero__name" data-parallax="-0.05"><span data-split>Awais Ali</span></h1>
-
-            <div class="hero__facts" data-parallax="0.04">
-              <div data-reveal data-reveal-delay="2">
-                <span class="mono">Role</span>
-                <p>Business Intelligence Analyst</p>
-              </div>
-              <div data-reveal data-reveal-delay="3">
-                <span class="mono">Currently</span>
-                <p>Beaconhouse Group</p>
-              </div>
-              <div data-reveal data-reveal-delay="4">
-                <span class="mono">Focus</span>
-                <p>Semantic models · ETL · Dashboards</p>
-              </div>
-              <div class="hero__cta" data-reveal data-reveal-delay="5">
-                <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-                <a class="btn btn--line" href="#projects">Projects</a>
-              </div>
+          <div class="hero__figure" data-reveal data-reveal-delay="2" data-parallax="0.05">
+            <div class="portrait lg" data-tilt data-tilt-max="10">
+              <picture>
+                <source srcset="images/awais.webp" type="image/webp" />
+                <img src="images/awais.jpg" alt="Awais Ali" width="880" height="880" fetchpriority="high" />
+              </picture>
             </div>
           </div>
+        </div>
+
+        <div class="hero__stripwrap">
+          <dl class="hero__meta lg" data-reveal data-reveal-delay="5">
+            <div><dt class="mono">Experience</dt><dd>3+ years in BI</dd></div>
+            <div><dt class="mono">Currently</dt><dd>Beaconhouse Group</dd></div>
+            <div><dt class="mono">Focus</dt><dd>Semantic models · ETL · Dashboards</dd></div>
+            <div><dt class="mono">Based in</dt><dd>Lahore, Pakistan</dd></div>
+          </dl>
         </div>
       </section>
 

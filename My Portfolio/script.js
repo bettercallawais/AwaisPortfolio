@@ -30,33 +30,47 @@ const motion = {
 const scenes = [];
 
 /* ── Tab title ─────────────────────────────────────────────
-   Switch away having spent under ten seconds here and the tab
-   calls it out; stay longer and it just keeps the name. Coming
-   back always restores the name.
-
-   Time is accumulated across visits rather than measured per
-   segment, so someone who has already read the page doesn't get
-   the quip for a three-second glance away later.               */
+   Leave the tab and it turns into a sad face; come back and the
+   name returns. No timing, no conditions.                      */
 (() => {
   const BASE = 'Awais Ali | BI Analyst';
-  const QUICK = 'That was quick';
-  const THRESHOLD = 10_000;
-
-  let since = document.visibilityState === 'visible' ? performance.now() : null;
-  let engaged = 0;
-
+  const AWAY = ':(';
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      if (since !== null) {
-        engaged += performance.now() - since;
-        since = null;
-      }
-      document.title = engaged < THRESHOLD ? QUICK : BASE;
-    } else {
-      since = performance.now();
-      document.title = BASE;
-    }
+    document.title = document.hidden ? AWAY : BASE;
   });
+})();
+
+/* ── Preloader ─────────────────────────────────────────────
+   Held for a 2s floor so it reads as intentional rather than a
+   flicker, and hard-capped at 3s so a slow asset can never trap
+   anyone behind it.                                            */
+(() => {
+  const el = $('#preloader');
+  if (!el) return;
+  const fill = $('#preloader-fill');
+  const FLOOR = 2000;
+  const CAP = 3000;
+  const t0 = performance.now();
+  let done = false;
+
+  document.body.classList.add('is-loading');
+  requestAnimationFrame(() => fill && (fill.style.width = '100%'));
+
+  const finish = () => {
+    if (done) return;
+    done = true;
+    el.classList.add('is-done');
+    document.body.classList.remove('is-loading');
+    document.body.classList.add('is-ready');
+    document.dispatchEvent(new Event('site:ready'));
+    setTimeout(() => el.remove(), 700);
+  };
+
+  const settle = () => setTimeout(finish, Math.max(0, FLOOR - (performance.now() - t0)));
+
+  if (document.readyState === 'complete') settle();
+  else window.addEventListener('load', settle, { once: true });
+  setTimeout(finish, CAP);
 })();
 
 /* ── Theme ─────────────────────────────────────────────────── */
@@ -285,10 +299,14 @@ $$('[data-split]').forEach((node, w) => {
   node.setAttribute('aria-label', text);
 });
 
-/* ── Reveal ────────────────────────────────────────────────── */
+/* ── Reveal ────────────────────────────────────────────────
+   Observation starts only once the preloader has cleared, so the
+   hero's entrance actually plays for the visitor instead of
+   finishing behind the loading screen.                          */
 (() => {
   const items = $$('[data-reveal]');
   items.forEach((el) => el.dataset.revealDelay && el.style.setProperty('--d', el.dataset.revealDelay));
+
   const io = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((e) => {
@@ -299,7 +317,14 @@ $$('[data-split]').forEach((node, w) => {
     },
     { rootMargin: '0px 0px -10% 0px', threshold: 0.06 }
   );
-  items.forEach((el) => io.observe(el));
+
+  const start = () => items.forEach((el) => io.observe(el));
+
+  if ($('#preloader') && !document.body.classList.contains('is-ready')) {
+    document.addEventListener('site:ready', start, { once: true });
+  } else {
+    start();
+  }
 })();
 
 /* ── Liquid-glass specular + 3D tilt with depth layers ─────── */
