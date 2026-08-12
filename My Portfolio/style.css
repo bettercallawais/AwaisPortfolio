@@ -209,8 +209,10 @@ p { text-wrap: pretty; }
   padding: 1.5rem 2rem;
 }
 .preloader__mark {
-  font-size: 1.3rem; font-weight: 600; letter-spacing: -0.05em;
-  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.72rem; font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--muted);
 }
 .preloader__bar {
   width: 148px; height: 2px; border-radius: 99px;
@@ -221,7 +223,6 @@ p { text-wrap: pretty; }
   background: var(--accent);
   transition: width 2.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.preloader__cap { font-size: 0.6rem; }
 body.is-loading { overflow: hidden; }
 
 /* ── Progress ──────────────────────────────────────────────── */
@@ -245,19 +246,30 @@ body.is-loading { overflow: hidden; }
   border-radius: 999px;
 }
 
-/* Monogram only — the hero already says the name, so repeating it
-   in the bar just reads as duplication. */
+/* Mark only — the hero already says the name, so repeating it in the
+   bar just reads as duplication. Three ascending bars: the same glyph
+   as the favicon, and on-topic for a BI portfolio. */
 .brand { display: flex; align-items: center; margin-right: auto; }
 .brand__mark {
-  display: grid; place-items: center;
-  width: 34px; height: 34px;
-  border-radius: 11px;
-  font-size: 0.72rem; font-weight: 600; letter-spacing: -0.02em;
-  color: var(--accent-ink);
-  background: var(--accent);
-  transition: transform 0.4s var(--ease-glass);
+  width: 30px; height: 30px;
+  overflow: visible;
 }
-.brand:hover .brand__mark { transform: rotate(-6deg) scale(1.07); }
+.brand__bar {
+  fill: var(--accent);
+  transform-origin: 50% 100%;
+  transition: transform 0.45s var(--ease-glass), opacity 0.45s var(--ease);
+}
+.brand__bar:nth-child(1) { opacity: 0.55; }
+.brand__bar:nth-child(2) { opacity: 0.78; }
+
+/* On hover the bars grow in sequence, like a chart resolving. */
+.brand:hover .brand__bar { opacity: 1; }
+.brand:hover .brand__bar:nth-child(1) { transform: scaleY(1.5); transition-delay: 0s; }
+.brand:hover .brand__bar:nth-child(2) { transform: scaleY(1.28); transition-delay: 0.05s; }
+.brand:hover .brand__bar:nth-child(3) { transform: scaleY(1.12); transition-delay: 0.1s; }
+
+html[data-motion="reduced"] .brand__bar { transition: opacity 0.3s var(--ease); }
+html[data-motion="reduced"] .brand:hover .brand__bar { transform: none; }
 
 .nav__list { position: relative; display: flex; align-items: center; gap: 0.05rem; list-style: none; padding: 0; margin: 0; }
 .nav__list a {
@@ -339,9 +351,13 @@ html[data-theme="light"] .hero__canvas.is-ready { opacity: 0.8; }
 .hero__wash {
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
-    linear-gradient(to right, var(--bg) 0%, color-mix(in oklab, var(--bg) 60%, transparent) 24%, transparent 52%),
-    linear-gradient(to bottom, var(--bg) 0%, transparent 22%, transparent 68%, var(--bg) 98%),
-    radial-gradient(125% 78% at 55% 50%, transparent 55%, var(--bg) 100%);
+    linear-gradient(to right,
+      var(--bg) 0%,
+      color-mix(in oklab, var(--bg) 86%, transparent) 28%,
+      color-mix(in oklab, var(--bg) 42%, transparent) 46%,
+      transparent 60%),
+    linear-gradient(to bottom, var(--bg) 0%, transparent 22%, transparent 64%, var(--bg) 98%),
+    radial-gradient(125% 78% at 58% 50%, transparent 52%, var(--bg) 100%);
 }
 
 /* Stacked layout: the copy spans the full width, so the left-hand scrim
