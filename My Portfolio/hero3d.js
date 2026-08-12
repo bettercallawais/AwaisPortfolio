@@ -13,21 +13,25 @@ const ROWS = 26;
 const GAP = 0.5;
 const COUNT = COLS * ROWS;
 
+/* Bars ramp low → high like a sequential data-viz scale: cool steel at the
+   base, the brand accent through the middle, a warm highlight at the peaks.
+   Lighting is a warm key against a cool fill, so form reads without the
+   colour ramp having to do the work alone. */
 const PALETTE = {
   dark: {
-    fog: 0x06070c,
-    a: 0x22d3ee, b: 0x8b5cf6, c: 0xe879f9,
-    ambient: 1.15, hemiSky: 0x2bd9f5, hemiGround: 0x0a0f1e, hemi: 1.3,
-    dir: 1.7, key: 700, rim: 850,
-    star: 0x9fd8ff, starOpacity: 0.6,
-    exposure: 1.15,
+    fog: 0x0a0a0b,
+    a: 0x4a5464, b: 0xff5a1f, c: 0xffc24a,
+    ambient: 1.05, hemiSky: 0x8fa0bc, hemiGround: 0x14100e, hemi: 1.25,
+    dir: 1.6, keyColor: 0xff5a1f, key: 780, rimColor: 0x5c6b85, rim: 700,
+    star: 0x8b8b93, starOpacity: 0.5,
+    exposure: 1.12,
   },
   light: {
-    fog: 0xf2f3f7,
-    a: 0x0090b0, b: 0x6d4aff, c: 0xb84ad8,
-    ambient: 1.5, hemiSky: 0xffffff, hemiGround: 0xc9d0e0, hemi: 1.6,
-    dir: 2.1, key: 500, rim: 620,
-    star: 0x5a6478, starOpacity: 0.35,
+    fog: 0xf6f5f2,
+    a: 0xa8aebc, b: 0xde4711, c: 0xf2a03d,
+    ambient: 1.45, hemiSky: 0xffffff, hemiGround: 0xd8d2c6, hemi: 1.55,
+    dir: 2.05, keyColor: 0xde4711, key: 560, rimColor: 0x8892a6, rim: 520,
+    star: 0x9a9488, starOpacity: 0.32,
     exposure: 1.0,
   },
 };
@@ -61,9 +65,9 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   const hemi = new THREE.HemisphereLight(P.hemiSky, P.hemiGround, P.hemi);
   const dir = new THREE.DirectionalLight(0xffffff, P.dir);
   dir.position.set(-3, 14, 8);
-  const key = new THREE.PointLight(P.a, P.key, 80, 2);
+  const key = new THREE.PointLight(P.keyColor, P.key, 80, 2);
   key.position.set(-9, 10, 9);
-  const rim = new THREE.PointLight(P.b, P.rim, 80, 2);
+  const rim = new THREE.PointLight(P.rimColor, P.rim, 80, 2);
   rim.position.set(11, 8, -6);
   scene.add(ambient, hemi, dir, key, rim);
 
@@ -270,9 +274,9 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
       hemi.groundColor.setHex(P.hemiGround);
       hemi.intensity = P.hemi;
       dir.intensity = P.dir;
-      key.color.setHex(P.a);
+      key.color.setHex(P.keyColor);
       key.intensity = P.key;
-      rim.color.setHex(P.b);
+      rim.color.setHex(P.rimColor);
       rim.intensity = P.rim;
       starMat.color.setHex(P.star);
       starMat.opacity = P.starOpacity;

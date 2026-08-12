@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#06070c" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
 
     <title>Awais Ali — Business Intelligence Analyst</title>
     <meta
@@ -37,7 +37,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..500&display=swap"
     />
 
     <link rel="preload" as="image" href="images/awais.webp" type="image/webp" />
@@ -78,7 +78,7 @@
 
     <!-- ── Header ──────────────────────────────────────────── -->
     <header class="header" id="header">
-      <nav class="nav lg lg--bar" aria-label="Primary">
+      <nav class="nav lg" aria-label="Primary">
         <a href="#top" class="brand">
           <span class="brand__mark" aria-hidden="true"></span>
           Awais Ali
@@ -119,43 +119,43 @@
         <div class="hero__wash" aria-hidden="true"></div>
 
         <div class="hero__inner">
-          <p class="kicker" data-reveal>Lahore, Pakistan — <span class="mono">33°C / UTC+5</span></p>
-
-          <h1 class="hero__name" data-parallax="-0.28">
-            <span class="line"><span data-split>Awais</span></span>
-            <span class="line line--2"><span data-split>Ali</span></span>
-          </h1>
-
-          <div class="hero__meta" data-parallax="-0.1">
-            <p class="hero__role" data-reveal data-reveal-delay="2">
-              Business Intelligence Analyst
-            </p>
-            <p class="hero__line" data-reveal data-reveal-delay="3">
-              I build semantic models, ETL pipelines and dashboards.
-              Currently at <span class="u">Beaconhouse Group</span>.
-            </p>
-            <div class="hero__actions" data-reveal data-reveal-delay="4">
-              <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
-              <a class="btn btn--line" href="#projects">Projects</a>
+          <div class="hero__top" data-parallax="-0.06">
+            <div class="kicker" data-reveal>
+              <span class="mono">Lahore, Pakistan</span>
+              <b>Available for BI &amp; Data Analyst roles</b>
+            </div>
+            <div class="hero__portrait" data-reveal data-reveal-delay="1">
+              <div class="portrait lg" data-tilt data-tilt-max="12">
+                <picture>
+                  <source srcset="images/awais.webp" type="image/webp" />
+                  <img src="images/awais.jpg" alt="Awais Ali" width="880" height="880" fetchpriority="high" />
+                </picture>
+              </div>
             </div>
           </div>
 
-          <div class="hero__portrait" data-parallax="0.22">
-            <div class="portrait lg" data-tilt data-tilt-max="10">
-              <picture>
-                <source srcset="images/awais.webp" type="image/webp" />
-                <img src="images/awais.jpg" alt="Awais Ali" width="900" height="900" fetchpriority="high" />
-              </picture>
+          <div class="hero__bottom">
+            <h1 class="hero__name" data-parallax="-0.05"><span data-split>Awais Ali</span></h1>
+
+            <div class="hero__facts" data-parallax="0.04">
+              <div data-reveal data-reveal-delay="2">
+                <span class="mono">Role</span>
+                <p>Business Intelligence Analyst</p>
+              </div>
+              <div data-reveal data-reveal-delay="3">
+                <span class="mono">Currently</span>
+                <p>Beaconhouse Group</p>
+              </div>
+              <div data-reveal data-reveal-delay="4">
+                <span class="mono">Focus</span>
+                <p>Semantic models · ETL · Dashboards</p>
+              </div>
+              <div class="hero__cta" data-reveal data-reveal-delay="5">
+                <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+                <a class="btn btn--line" href="#projects">Projects</a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="hero__rail" aria-hidden="true">
-          <span class="mono">3+ yrs</span><i></i>
-          <span class="mono">Power BI</span><i></i>
-          <span class="mono">BigQuery</span><i></i>
-          <span class="mono">SQL</span><i></i>
-          <span class="mono">Python</span>
         </div>
       </section>
 
@@ -202,7 +202,7 @@
               <li class="role lg" data-reveal data-tilt data-tilt-max="3">
                 <div class="role__head">
                   <h2>Assistant Manager, Business Intelligence</h2>
-                  <span class="mono role__when">2025 — now</span>
+                  <span class="mono">2025 — now</span>
                 </div>
                 <p class="role__org">Beaconhouse Group · Lahore</p>
                 <ul class="terse">
@@ -215,7 +215,7 @@
               <li class="role lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="3">
                 <div class="role__head">
                   <h2>Business Intelligence Developer</h2>
-                  <span class="mono role__when">2023 — 2025</span>
+                  <span class="mono">2023 — 2025</span>
                 </div>
                 <p class="role__org">Kaswa.Ai · Remote</p>
                 <ul class="terse">
@@ -428,6 +428,7 @@
               <li><span class="mono">Email</span><a href="mailto:ds.awaisali@gmail.com">ds.awaisali@gmail.com</a></li>
               <li><span class="mono">LinkedIn</span><a href="https://www.linkedin.com/in/awaisali-bi" target="_blank" rel="noopener">/in/awaisali-bi</a></li>
               <li><span class="mono">Phone</span><a href="tel:+923064086446">+92 306 4086446</a></li>
+              <li><span class="mono">Resume</span><a href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Download PDF</a></li>
             </ul>
 
             <form

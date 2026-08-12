@@ -12,8 +12,8 @@ const DIMS = ['DIM_DATE', 'DIM_PRODUCT', 'DIM_CUSTOMER', 'DIM_STORE', 'DIM_CHANN
 const RADIUS = 3.5;
 
 const PALETTE = {
-  dark: { fact: 0x22d3ee, dim: 0x8b5cf6, line: 0x5a6a86, label: '#f0f2f7', chip: 'rgba(12,14,22,.85)', ambient: 1.2, dir: 2 },
-  light: { fact: 0x0090b0, dim: 0x6d4aff, line: 0x9aa4b8, label: '#10131a', chip: 'rgba(255,255,255,.9)', ambient: 1.9, dir: 2.6 },
+  dark: { fact: 0xff5a1f, dim: 0x5c6b85, line: 0x4a505e, label: '#f4f4f5', chip: 'rgba(14,14,16,.86)', ambient: 1.15, dir: 2 },
+  light: { fact: 0xde4711, dim: 0x8892a6, line: 0xa9afbc, label: '#131316', chip: 'rgba(255,255,255,.92)', ambient: 1.85, dir: 2.55 },
 };
 
 /* A label rendered to a 2D canvas, used as a sprite texture. */
@@ -22,14 +22,14 @@ function makeLabel(text, P, renderer) {
   const fs = 40;
   const c = document.createElement('canvas');
   const ctx = c.getContext('2d');
-  ctx.font = `500 ${fs}px "JetBrains Mono", ui-monospace, monospace`;
+  ctx.font = `500 ${fs}px "Geist Mono", ui-monospace, monospace`;
   const w = Math.ceil(ctx.measureText(text).width) + pad * 2;
   const h = fs + pad * 2;
   c.width = w;
   c.height = h;
 
   const g = c.getContext('2d');
-  g.font = `500 ${fs}px "JetBrains Mono", ui-monospace, monospace`;
+  g.font = `500 ${fs}px "Geist Mono", ui-monospace, monospace`;
   g.textBaseline = 'middle';
   g.fillStyle = P.chip;
   g.beginPath();
