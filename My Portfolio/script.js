@@ -259,7 +259,7 @@ const pipeline = (() => {
   const pipe = $('#pipe');
   if (!pipe) return { frame() {} };
   const stages = $$('.stage', pipe);
-  const stacked = matchMedia('(max-width: 940px)');
+  const stacked = matchMedia('(max-width: 1180px)');
   let last = -1;
 
   return {

@@ -1097,7 +1097,7 @@ html[dir="rtl"] .inspector__name { text-align: right; }
   --p: 0;
   position: relative;
   list-style: none; margin: clamp(2.4rem, 5vw, 3.6rem) 0 0; padding: 3rem 0 0;
-  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.75rem;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.7rem;
 }
 .pipe__rail {
   position: absolute; top: 1rem; inset-inline: 1.35rem;
@@ -1187,13 +1187,21 @@ html[dir="rtl"] .stage__tools { justify-content: flex-end; }
 .grounding dd { margin: 0; font-size: 0.9rem; }
 html[dir="rtl"] .grounding dd[dir="ltr"] { text-align: right; }
 
-@media (max-width: 1100px) and (min-width: 941px) {
-  .stage { padding-inline: 0.95rem; }
+/* The AI stage is where the stack is heading, so it carries the accent. */
+.stage--ai { box-shadow: var(--lg-shadow), inset 0 0 0 1px color-mix(in oklab, var(--accent) 45%, transparent); }
+.stage--ai > .stage__node { border-style: dashed; }
+.stage--ai .stage__tools li { border-color: color-mix(in oklab, var(--accent) 40%, transparent); }
+
+@media (max-width: 1320px) and (min-width: 1181px) {
+  .stage { padding-inline: 0.9rem; }
   .stage__story { font-size: 0.8rem; }
+  .stage__tools li { font-size: 0.62rem; padding-inline: 0.42rem; }
 }
 
-@media (max-width: 940px) {
-  .pipe { grid-template-columns: minmax(0, 1fr); gap: 0.7rem; padding: 0; padding-inline-start: 2.9rem; }
+/* Six stages stop fitting side by side below 1180px: run them down a
+   vertical rail, capped to a readable width on tablets. */
+@media (max-width: 1180px) {
+  .pipe { grid-template-columns: minmax(0, 1fr); gap: 0.7rem; padding: 0; padding-inline-start: 2.9rem; max-width: 46rem; }
   .pipe__rail { top: 1.2rem; bottom: 1.2rem; inset-inline: auto; inset-inline-start: 1rem; width: 2px; height: auto; }
   .pipe__fill { inset-inline: 0; top: 0; bottom: auto; width: auto; height: calc(var(--p) * 100%); }
   .pipe__packet,

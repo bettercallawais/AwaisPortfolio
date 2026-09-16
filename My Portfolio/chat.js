@@ -37,8 +37,19 @@ const NOTES = [
     weak: ['who', 'do', 'doing', 'ماذا', 'يعمل', 'من'],
     ar: ['نبذه', 'تعريف', 'ملخص'],
     reply: {
-      en: 'Awais Ali is a Business Intelligence Analyst in Lahore with 3+ years in BI. He is Assistant Manager BI at Beaconhouse Group, building semantic models, ETL pipelines and dashboards, and holds a BS in Artificial Intelligence from UMT.',
-      ar: 'أويس علي محلل ذكاء أعمال في لاهور بخبرة تزيد على 3 سنوات. يعمل مساعد مدير ذكاء الأعمال في مجموعة بيكونهاوس، حيث يبني النماذج الدلالية وخطوط معالجة البيانات ولوحات المعلومات، ويحمل بكالوريوس الذكاء الاصطناعي من جامعة UMT.',
+      en: 'Awais Ali is a Business Intelligence professional in Lahore with 3+ years in BI, now moving into data science and AI engineering. He is Assistant Manager BI at Beaconhouse Group, building semantic models, ETL pipelines and dashboards, and holds a BS in Artificial Intelligence from UMT.',
+      ar: 'أويس علي متخصص في ذكاء الأعمال في لاهور بخبرة تزيد على 3 سنوات، وينتقل الآن إلى علم البيانات وهندسة الذكاء الاصطناعي. يعمل مساعد مدير ذكاء الأعمال في مجموعة بيكونهاوس، حيث يبني النماذج الدلالية وخطوط معالجة البيانات ولوحات المعلومات، ويحمل بكالوريوس الذكاء الاصطناعي من جامعة UMT.',
+    },
+  },
+  {
+    // Placed before experience/stack/education so AI questions win ties.
+    // No bare 'learning' or 'intelligence': those would steal "LinkedIn
+    // Learning" and "business intelligence" questions.
+    keys: ['ai', 'ml', 'machine', 'llm', 'llms', 'langchain', 'hugging', 'huggingface', 'genai', 'generative', 'vision', 'nlp', 'deep', 'neural', 'artificial', 'science', 'scientist', 'engineer', 'engineering'],
+    ar: ['اصطناعي', 'تعلم', 'الاله', 'لغوي', 'رؤيه', 'حاسوبي', 'هندس', 'عميق', 'توليدي'],
+    reply: {
+      en: 'Awais is moving from BI into data science and AI engineering — the natural next step from the pipelines and models he already builds, since ML and LLM apps run on exactly that kind of clean, modeled data. His BS in Artificial Intelligence covered machine learning, computer vision and large language models, working with LangChain and Hugging Face. He is open to Data Science and AI Engineering roles as well as BI.',
+      ar: 'ينتقل أويس من ذكاء الأعمال إلى علم البيانات وهندسة الذكاء الاصطناعي — وهي الخطوة الطبيعية التالية لخطوط البيانات والنماذج التي يبنيها، إذ تعتمد تطبيقات تعلّم الآلة والنماذج اللغوية على هذا النوع تحديدًا من البيانات النظيفة والمنمذجة. شملت دراسته لبكالوريوس الذكاء الاصطناعي تعلّم الآلة والرؤية الحاسوبية والنماذج اللغوية الكبيرة، مع العمل على LangChain وHugging Face. وهو متاح لوظائف علم البيانات وهندسة الذكاء الاصطناعي إلى جانب ذكاء الأعمال.',
     },
   },
   {
@@ -62,16 +73,16 @@ const NOTES = [
     keys: ['skills', 'skill', 'stack', 'tools', 'technologies', 'tech', 'know', 'expertise', 'good', 'use', 'uses'],
     ar: ['مهار', 'تقني', 'ادوات', 'اداه', 'تكنولوج', 'يستخدم', 'برامج'],
     reply: {
-      en: 'Awais’s stack follows data from mess to decision:\n1. Ingest — SQL Server, MySQL, Google Sheets and Excel, across five industries.\n2. Transform — BigQuery, Python, Power Query, SSIS and Fabric pipelines that cut manual reporting by 40%.\n3. Model — star schemas and DAX in one certified semantic model, so every team trusts the same numbers.\n4. Visualise — Power BI and Looker Studio dashboards that made analysis 35% faster.\n5. Deliver — scheduled refresh, gateways and row-level security keep it live and governed.\nUnder all of it: a BS in Artificial Intelligence.',
-      ar: 'تتبع أدوات أويس رحلة البيانات من الفوضى إلى القرار:\n1. الجمع — SQL Server وMySQL وGoogle Sheets وExcel عبر خمسة قطاعات.\n2. التحويل — خطوط معالجة في BigQuery وPython وPower Query وSSIS وFabric قلّلت العمل اليدوي بنسبة 40%.\n3. النمذجة — مخططات نجمة وDAX في نموذج دلالي معتمد واحد، ليثق كل فريق بالأرقام نفسها.\n4. العرض — لوحات Power BI وLooker Studio جعلت التحليل أسرع بنسبة 35%.\n5. التسليم — تحديث مجدول وبوابات بيانات وصلاحيات على مستوى الصف تُبقي التقارير حيّة ومحوكمة.\nوالأساس تحت كل ذلك: بكالوريوس في الذكاء الاصطناعي.',
+      en: 'Awais’s stack follows data from mess to decision:\n1. Ingest — SQL Server, MySQL, Google Sheets and Excel, across five industries.\n2. Transform — BigQuery, Python, Power Query, SSIS and Fabric pipelines that cut manual reporting by 40%.\n3. Model — star schemas and DAX in one certified semantic model, so every team trusts the same numbers.\n4. Visualise — Power BI and Looker Studio dashboards that made analysis 35% faster.\n5. Deliver — scheduled refresh, gateways and row-level security keep it live and governed.\n6. Apply AI — machine learning, LLMs, LangChain and Hugging Face from his BS in Artificial Intelligence: where he is heading next.',
+      ar: 'تتبع أدوات أويس رحلة البيانات من الفوضى إلى القرار:\n1. الجمع — SQL Server وMySQL وGoogle Sheets وExcel عبر خمسة قطاعات.\n2. التحويل — خطوط معالجة في BigQuery وPython وPower Query وSSIS وFabric قلّلت العمل اليدوي بنسبة 40%.\n3. النمذجة — مخططات نجمة وDAX في نموذج دلالي معتمد واحد، ليثق كل فريق بالأرقام نفسها.\n4. العرض — لوحات Power BI وLooker Studio جعلت التحليل أسرع بنسبة 35%.\n5. التسليم — تحديث مجدول وبوابات بيانات وصلاحيات على مستوى الصف تُبقي التقارير حيّة ومحوكمة.\n6. تطبيق الذكاء الاصطناعي — تعلّم الآلة والنماذج اللغوية الكبيرة وLangChain وHugging Face من دراسته للذكاء الاصطناعي: وجهته التالية.',
     },
   },
   {
     keys: ['power', 'bi', 'dax', 'powerbi', 'dashboard', 'dashboards', 'report', 'reports', 'looker'],
     ar: ['لوحات', 'لوحه', 'تقارير', 'تقرير', 'داشبورد'],
     reply: {
-      en: 'Power BI is Awais’s main tool — star-schema semantic models, advanced DAX, drill-through, row-level security, gateways and scheduled refresh. He also builds in Looker Studio at Beaconhouse. His portfolio has four Power BI case studies you can open.',
-      ar: 'Power BI هو أداة أويس الأساسية — نماذج دلالية بمخطط النجمة، وDAX متقدم، وتنقّل تفصيلي، وصلاحيات على مستوى الصف، وبوابات بيانات وتحديث مجدول. كما يبني تقارير في Looker Studio في بيكونهاوس. يضم الموقع أربع دراسات حالة في Power BI يمكنك فتحها.',
+      en: 'Power BI is Awais’s main tool — star-schema semantic models, advanced DAX, drill-through, row-level security, gateways and scheduled refresh. He also builds in Looker Studio at Beaconhouse. His portfolio has three Power BI case studies you can open.',
+      ar: 'Power BI هو أداة أويس الأساسية — نماذج دلالية بمخطط النجمة، وDAX متقدم، وتنقّل تفصيلي، وصلاحيات على مستوى الصف، وبوابات بيانات وتحديث مجدول. كما يبني تقارير في Looker Studio في بيكونهاوس. يضم الموقع ثلاث دراسات حالة في Power BI يمكنك فتحها.',
     },
   },
   {
@@ -86,21 +97,21 @@ const NOTES = [
     keys: ['python', 'pandas', 'automation', 'automate', 'script', 'scripts'],
     ar: ['بايثون', 'اتمت', 'مؤتمت'],
     reply: {
-      en: 'Awais uses Python (pandas, NumPy, Matplotlib) for automation and analysis — ETL at Beaconhouse, multi-touch marketing attribution, and scheduled seasonal-trend analysis on sales data.',
-      ar: 'يستخدم أويس Python (pandas وNumPy وMatplotlib) للأتمتة والتحليل — معالجة البيانات في بيكونهاوس، وإسناد التسويق متعدد نقاط التواصل، وتحليل الاتجاهات الموسمية للمبيعات وفق جدول زمني.',
+      en: 'Awais uses Python (pandas, NumPy, Matplotlib) for ETL and reporting automation at Beaconhouse, and it is the language of his AI work: machine learning, computer vision and LLM apps with LangChain and Hugging Face from his BS in Artificial Intelligence.',
+      ar: 'يستخدم أويس Python (pandas وNumPy وMatplotlib) لأتمتة معالجة البيانات والتقارير في بيكونهاوس، وهي أيضًا لغة عمله في الذكاء الاصطناعي: تعلّم الآلة والرؤية الحاسوبية وتطبيقات النماذج اللغوية باستخدام LangChain وHugging Face خلال دراسته لبكالوريوس الذكاء الاصطناعي.',
     },
   },
   {
     keys: ['projects', 'project', 'portfolio', 'case', 'studies', 'built', 'build', 'examples', 'samples'],
     ar: ['مشاريع', 'مشروع', 'دراسات', 'امثله'],
     reply: {
-      en: 'Six projects are on the portfolio: Customer Support / Call Centre, E-commerce & Finance, Healthcare Operations, Supply Chain Analytics, Digital Marketing Attribution, and Sales Performance & Trend. Scroll to Projects to open any case study.',
-      ar: 'على الموقع ستة مشاريع: خدمة العملاء / مركز الاتصال، والتجارة الإلكترونية والمالية، والعمليات الصحية، وتحليلات سلسلة الإمداد، وإسناد التسويق الرقمي، وأداء المبيعات والاتجاهات. انتقل إلى قسم المشاريع لفتح أي دراسة حالة.',
+      en: 'Three case studies are on the portfolio: Customer Support / Call Centre (with a live Power BI report), E-commerce & Finance, and Healthcare Operations. Data science and AI builds are next. Scroll to Projects to open any case study.',
+      ar: 'على الموقع ثلاث دراسات حالة: خدمة العملاء / مركز الاتصال (مع تقرير Power BI حيّ)، والتجارة الإلكترونية والمالية، والعمليات الصحية. ومشاريع علم البيانات والذكاء الاصطناعي هي الخطوة التالية. انتقل إلى قسم المشاريع لفتح أي دراسة حالة.',
     },
   },
   {
-    keys: ['education', 'degree', 'university', 'umt', 'study', 'studied', 'graduate', 'bachelor', 'bachelors', 'bs', 'ai', 'artificial', 'intelligence', 'machine', 'learning', 'ml'],
-    ar: ['تعليم', 'دراس', 'جامع', 'بكالوريوس', 'تخرج', 'اصطناعي', 'مؤهل', 'درس'],
+    keys: ['education', 'degree', 'university', 'umt', 'study', 'studied', 'graduate', 'bachelor', 'bachelors', 'bs', 'fyp', 'thesis'],
+    ar: ['تعليم', 'دراس', 'جامع', 'بكالوريوس', 'تخرج', 'مؤهل', 'درس'],
     reply: {
       en: 'Awais holds a BS in Artificial Intelligence from the University of Management & Technology, Lahore (2021–2025), with coursework in statistics, machine learning, data mining, probability and linear algebra. His final-year project was a genetic-algorithm timetable scheduler that generated clash-free timetables.',
       ar: 'يحمل أويس بكالوريوس الذكاء الاصطناعي من جامعة الإدارة والتكنولوجيا في لاهور (2021–2025)، ودرس الإحصاء وتعلّم الآلة والتنقيب في البيانات والاحتمالات والجبر الخطي. كان مشروع تخرجه نظامًا لجدولة المحاضرات بالخوارزميات الجينية يُنتج جداول خالية من التعارضات.',
@@ -118,16 +129,16 @@ const NOTES = [
     keys: ['hire', 'hiring', 'available', 'availability', 'open', 'remote', 'hybrid', 'onsite', 'freelance', 'contract', 'opportunity', 'roles', 'interested', 'recruit', 'vacancy'],
     ar: ['توظيف', 'متاح', 'وظائف', 'وظيفه', 'فرص', 'هجين', 'تعيين'],
     reply: {
-      en: `Awais is open to BI and Data Analyst roles — on-site, hybrid or remote. The quickest way to start a conversation is ${EMAIL} or the contact form at the bottom of this page.`,
-      ar: `أويس متاح لوظائف ذكاء الأعمال وتحليل البيانات — حضوريًا أو هجينًا أو عن بُعد. أسرع طريقة لبدء المحادثة هي ${EMAIL} أو نموذج التواصل أسفل هذه الصفحة.`,
+      en: `Awais is open to Data Science, AI Engineering and BI roles — on-site, hybrid or remote. The quickest way to start a conversation is ${EMAIL} or the contact form at the bottom of this page.`,
+      ar: `أويس متاح لوظائف علم البيانات وهندسة الذكاء الاصطناعي وذكاء الأعمال —حضوريًا أو هجينًا أو عن بُعد. أسرع طريقة لبدء المحادثة هي ${EMAIL} أو نموذج التواصل أسفل هذه الصفحة.`,
     },
   },
   {
     keys: ['contact', 'email', 'reach', 'phone', 'call', 'linkedin', 'message', 'connect', 'number', 'whatsapp'],
     ar: ['تواصل', 'اتصال', 'بريد', 'ايميل', 'هاتف', 'رقم', 'لينكد', 'واتساب', 'راسل'],
     reply: {
-      en: `Email: ${EMAIL}\nLinkedIn: https://www.linkedin.com/in/awaisali-bi\nPhone: +92 306 4086446\nOr use the contact form at the bottom of this page.`,
-      ar: `البريد الإلكتروني: ${EMAIL}\nلينكدإن: https://www.linkedin.com/in/awaisali-bi\nالهاتف: +92 306 4086446\nأو استخدم نموذج التواصل أسفل هذه الصفحة.`,
+      en: `Email: ${EMAIL}\nLinkedIn: https://www.linkedin.com/in/awaisali-bi\nPhone: +92 339 0006901\nOr use the contact form at the bottom of this page.`,
+      ar: `البريد الإلكتروني: ${EMAIL}\nلينكدإن: https://www.linkedin.com/in/awaisali-bi\nالهاتف: +92 339 0006901\nأو استخدم نموذج التواصل أسفل هذه الصفحة.`,
     },
   },
   {
