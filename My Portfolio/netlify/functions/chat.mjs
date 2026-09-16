@@ -8,7 +8,7 @@
    Netlify env vars:
      GEMINI_API_KEY   required — from aistudio.google.com, on a project
                       with billing OFF so it can never cost money
-     GEMINI_MODEL     optional — defaults to gemini-2.5-flash-lite
+     GEMINI_MODEL     optional — pin one model; otherwise MODELS below
    ═══════════════════════════════════════════════════════════════ */
 
 export const config = { path: '/api/chat' };
@@ -127,11 +127,30 @@ function toContents(messages) {
   return turns.map((t) => ({ role: t.role, parts: [{ text: t.text }] }));
 }
 
+/* Tried in order. The `-latest` aliases follow whatever Google currently
+   serves on the free tier, so a retired model name can't break the bot. */
+const MODELS = ['gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-flash-latest'];
+
+/* Only Google's status code and reason enum (e.g. API_KEY_INVALID) are
+   returned to the browser, never the message text, which can include
+   project identifiers. The full text goes to the function log. */
+async function upstreamError(res, model) {
+  const detail = await res.text().catch(() => '');
+  console.warn(`Gemini ${model} ${res.status}: ${detail.slice(0, 400)}`);
+  let reason;
+  try {
+    const err = JSON.parse(detail)?.error;
+    reason = err?.details?.find((d) => d.reason)?.reason ?? err?.status;
+  } catch { /* non-JSON body */ }
+  return { status: res.status, reason };
+}
+
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'POST only' });
   if (!allowedOrigin(req)) return json(403, { error: 'Origin not allowed' });
 
-  const key = env('GEMINI_API_KEY');
+  // Pasted keys often carry spaces, newlines or quotes.
+  const key = (env('GEMINI_API_KEY') || '').trim().replace(/^["']|["']$/g, '');
   if (!key) return json(503, { error: 'not_configured' });
 
   let body;
@@ -144,50 +163,49 @@ export default async (req) => {
   const contents = toContents(body?.messages);
   if (!contents) return json(400, { error: 'Expected messages ending with a user turn' });
 
-  const model = env('GEMINI_MODEL') || 'gemini-2.5-flash-lite';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const pinned = env('GEMINI_MODEL');
+  const models = pinned ? [pinned.trim()] : MODELS;
+  let last = { status: 0 };
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents,
-        generationConfig: { temperature: 0.3, maxOutputTokens: 350 },
-      }),
-      signal: AbortSignal.timeout(15000),
-    });
-
-    if (!res.ok) {
-      // 429 = free quota spent for now. Anything else is logged for the Netlify function log.
-      const detail = await res.text().catch(() => '');
-      console.warn(`Gemini ${res.status}: ${detail.slice(0, 300)}`);
-      // Surface only Google's status code and reason enum (e.g. API_KEY_INVALID)
-      // so a broken setup can be diagnosed from the browser. Never the message
-      // text, which can include project identifiers.
-      let reason;
-      try {
-        const err = JSON.parse(detail)?.error;
-        reason = err?.details?.find((d) => d.reason)?.reason ?? err?.status;
-      } catch { /* non-JSON body */ }
-      return json(503, {
-        error: res.status === 429 ? 'rate_limited' : 'upstream_error',
-        upstream: res.status,
-        ...(reason ? { reason } : {}),
+  for (const model of models) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM }] },
+          contents,
+          generationConfig: { temperature: 0.3, maxOutputTokens: 350 },
+        }),
+        signal: AbortSignal.timeout(12000),
       });
+
+      if (!res.ok) {
+        last = await upstreamError(res, model);
+        // Only a missing/unavailable model is worth retrying with the next one.
+        // A bad key or permission problem fails the same way on every model.
+        if (res.status === 404 || last.reason === 'NOT_FOUND') continue;
+        break;
+      }
+
+      const data = await res.json();
+      const reply = (data?.candidates?.[0]?.content?.parts ?? [])
+        .map((p) => p.text ?? '')
+        .join('')
+        .trim();
+
+      if (!reply) return json(503, { error: 'empty_reply', model });
+      return json(200, { reply });
+    } catch (err) {
+      console.warn(`Gemini ${model} request failed:`, err?.name, err?.message);
+      return json(503, { error: 'upstream_unreachable' });
     }
-
-    const data = await res.json();
-    const reply = (data?.candidates?.[0]?.content?.parts ?? [])
-      .map((p) => p.text ?? '')
-      .join('')
-      .trim();
-
-    if (!reply) return json(503, { error: 'empty_reply' });
-    return json(200, { reply });
-  } catch (err) {
-    console.warn('Gemini request failed:', err?.name, err?.message);
-    return json(503, { error: 'upstream_unreachable' });
   }
+
+  return json(503, {
+    error: last.status === 429 ? 'rate_limited' : 'upstream_error',
+    upstream: last.status,
+    ...(last.reason ? { reason: last.reason } : {}),
+  });
 };
