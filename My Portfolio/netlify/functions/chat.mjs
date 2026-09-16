@@ -163,7 +163,19 @@ export default async (req) => {
       // 429 = free quota spent for now. Anything else is logged for the Netlify function log.
       const detail = await res.text().catch(() => '');
       console.warn(`Gemini ${res.status}: ${detail.slice(0, 300)}`);
-      return json(503, { error: res.status === 429 ? 'rate_limited' : 'upstream_error' });
+      // Surface only Google's status code and reason enum (e.g. API_KEY_INVALID)
+      // so a broken setup can be diagnosed from the browser. Never the message
+      // text, which can include project identifiers.
+      let reason;
+      try {
+        const err = JSON.parse(detail)?.error;
+        reason = err?.details?.find((d) => d.reason)?.reason ?? err?.status;
+      } catch { /* non-JSON body */ }
+      return json(503, {
+        error: res.status === 429 ? 'rate_limited' : 'upstream_error',
+        upstream: res.status,
+        ...(reason ? { reason } : {}),
+      });
     }
 
     const data = await res.json();
