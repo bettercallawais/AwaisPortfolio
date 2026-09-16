@@ -19,12 +19,12 @@
     <meta property="og:url" content="https://awaisx.netlify.app/" />
     <meta property="og:title" content="Awais Ali — Business Intelligence Analyst" />
     <meta property="og:description" content="Semantic models, ETL pipelines and dashboards. Power BI · Looker Studio · SQL · Python · BigQuery." />
-    <meta property="og:image" content="https://awaisx.netlify.app/images/awais.jpg" />
+    <meta property="og:image" content="https://awaisx.netlify.app/images/portrait-2026.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://awaisx.netlify.app/images/awais.jpg" />
+    <meta name="twitter:image" content="https://awaisx.netlify.app/images/portrait-2026.jpg" />
 
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="images/awais-sm.jpg" />
+    <link rel="apple-touch-icon" href="images/portrait-2026-sm.jpg" />
 
     <!-- Theme + motion resolved before first paint, so there is no flash. -->
     <script>
@@ -44,7 +44,7 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..500&display=swap"
     />
 
-    <link rel="preload" as="image" href="images/awais.webp" type="image/webp" />
+    <link rel="preload" as="image" href="images/portrait-2026.webp" type="image/webp" />
     <link rel="stylesheet" href="style.css" />
 
     <script type="importmap">
@@ -160,8 +160,8 @@
           <div class="hero__figure" data-reveal data-reveal-delay="2" data-parallax="0.05">
             <div class="portrait lg" data-tilt data-tilt-max="10">
               <picture>
-                <source srcset="images/awais.webp" type="image/webp" />
-                <img src="images/awais.png" alt="Awais Ali" width="880" height="880" fetchpriority="high" />
+                <source srcset="images/portrait-2026.webp" type="image/webp" />
+                <img src="images/portrait-2026.jpg" alt="Awais Ali" width="673" height="673" fetchpriority="high" />
               </picture>
             </div>
           </div>
@@ -461,6 +461,7 @@
               data-reveal-delay="2"
             >
               <input type="hidden" name="form-name" value="contact" />
+              <input type="hidden" name="subject" data-remove-prefix value="New message from your portfolio (awaisx.netlify.app)" />
               <p class="hp"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
 
               <div class="field">
@@ -506,6 +507,44 @@
       </div>
     </div>
 
+    <!-- ── Chat assistant ──────────────────────────────────── -->
+    <button class="chat-launcher lg" id="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l.9-4.4A8 8 0 1 1 20 12Z" /><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" /></svg>
+      <span class="chat-launcher__label">Ask about Awais</span>
+    </button>
+
+    <section class="chat lg" id="chat-panel" role="dialog" aria-labelledby="chat-title" hidden>
+      <header class="chat__head">
+        <div>
+          <p class="chat__title" id="chat-title"><span class="dot--live" aria-hidden="true"></span>Ask about Awais</p>
+          <span class="mono">Portfolio assistant</span>
+        </div>
+        <button class="icon-btn" id="chat-close" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          <span class="sr-only">Close chat</span>
+        </button>
+      </header>
+
+      <div class="chat__log" id="chat-log" role="log" aria-live="polite"></div>
+
+      <div class="chat__suggest" id="chat-suggest">
+        <button type="button" data-q="What does Awais do?">What does he do?</button>
+        <button type="button" data-q="What is his tech stack?">Tech stack</button>
+        <button type="button" data-q="Show me his projects">Projects</button>
+        <button type="button" data-q="How can I contact Awais?">Contact</button>
+      </div>
+
+      <form class="chat__form" id="chat-form">
+        <label class="sr-only" for="chat-input">Your question</label>
+        <input id="chat-input" type="text" maxlength="600" autocomplete="off" placeholder="Ask a question…" />
+        <button class="chat__send" id="chat-send" type="submit">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          <span class="sr-only">Send</span>
+        </button>
+      </form>
+    </section>
+
     <script type="module" src="script.js"></script>
+    <script type="module" src="chat.js"></script>
   </body>
 </html>
