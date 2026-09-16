@@ -1,9 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════
-   Hero — an animated data terrain: ~900 instanced bars rippling
+   Hero — an animated data terrain: 1,040 instanced bars rippling
    like a report mid-refresh, over a drifting point field.
 
+   Every bar height is solved on the GPU in the vertex shader, so the
+   main thread does no per-bar work at all — the wave costs one uniform
+   per frame. The cursor raises a soft swell in the field beneath it,
+   and the tallest bars glow at their tips.
+
    Theme-aware and motion-aware. Under reduced motion the scene is
-   still drawn, it simply holds a pose instead of animating.
+   still drawn, it simply holds a pose.
    ═══════════════════════════════════════════════════════════════ */
 
 import * as THREE from 'three';
@@ -13,25 +18,27 @@ const ROWS = 26;
 const GAP = 0.5;
 const COUNT = COLS * ROWS;
 
-/* Bars ramp low → high like a sequential data-viz scale: cool steel at the
-   base, the brand accent through the middle, a warm highlight at the peaks.
-   Lighting is a warm key against a cool fill, so form reads without the
-   colour ramp having to do the work alone. */
+/* Colours come from the portrait: navy suit at the base, the tie's
+   slate blue through the middle, the shirt's blue-white at the peaks.
+   A faint warm rim (the only warm light) keeps the forms from reading
+   as flat plastic. */
 const PALETTE = {
   dark: {
-    fog: 0x0a0a0b,
-    a: 0x4a5464, b: 0xff5a1f, c: 0xffc24a,
-    ambient: 1.05, hemiSky: 0x8fa0bc, hemiGround: 0x14100e, hemi: 1.25,
-    dir: 1.6, keyColor: 0xff5a1f, key: 780, rimColor: 0x5c6b85, rim: 700,
-    star: 0x8b8b93, starOpacity: 0.5,
-    exposure: 1.12,
+    fog: 0x07090e,
+    a: 0x283150, b: 0x7f98e6, c: 0xe3eaff,
+    ambient: 0.95, hemiSky: 0x9fb2e6, hemiGround: 0x06070b, hemi: 1.2,
+    dir: 1.55, keyColor: 0x93aaf2, key: 820, rimColor: 0xc99a8e, rim: 360,
+    glow: 0xaebfff, glowAmt: 0.75,
+    star: 0x8e96aa, starOpacity: 0.5,
+    exposure: 1.1,
   },
   light: {
-    fog: 0xf6f5f2,
-    a: 0xa8aebc, b: 0xde4711, c: 0xf2a03d,
-    ambient: 1.45, hemiSky: 0xffffff, hemiGround: 0xd8d2c6, hemi: 1.55,
-    dir: 2.05, keyColor: 0xde4711, key: 560, rimColor: 0x8892a6, rim: 520,
-    star: 0x9a9488, starOpacity: 0.32,
+    fog: 0xeef1f6,
+    a: 0xb3bdd3, b: 0x3a52b4, c: 0x7389de,
+    ambient: 1.5, hemiSky: 0xffffff, hemiGround: 0xcfd6e4, hemi: 1.5,
+    dir: 2.0, keyColor: 0x5a70c8, key: 520, rimColor: 0xd9b1a6, rim: 260,
+    glow: 0x3a52b4, glowAmt: 0.12,
+    star: 0x8a93a8, starOpacity: 0.3,
     exposure: 1.0,
   },
 };
@@ -75,21 +82,95 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   const geo = new THREE.BoxGeometry(0.29, 1, 0.29);
   geo.translate(0, 0.5, 0); // base pivot: scaling grows upward
 
+  // Per-instance grid cell: x, z, and distance from centre.
+  const cells = new Float32Array(COUNT * 3);
+  {
+    let i = 0;
+    for (let c = 0; c < COLS; c++) {
+      for (let r = 0; r < ROWS; r++) {
+        const x = (c - (COLS - 1) / 2) * GAP;
+        const z = (r - (ROWS - 1) / 2) * GAP;
+        cells[i * 3] = x;
+        cells[i * 3 + 1] = z;
+        cells[i * 3 + 2] = Math.hypot(x, z);
+        i++;
+      }
+    }
+  }
+  geo.setAttribute('aCell', new THREE.InstancedBufferAttribute(cells, 3));
+
+  const uniforms = {
+    uTime: { value: 1.2 },
+    uPointer: { value: new THREE.Vector2(0, 0) },
+    uLift: { value: 0 },
+    uGlow: { value: new THREE.Color(P.glow) },
+    uGlowAmt: { value: P.glowAmt },
+  };
+
   // Low metalness on purpose — there is no environment map, and metal
   // with nothing to reflect renders black.
   const mat = new THREE.MeshStandardMaterial({
-    roughness: 0.42,
-    metalness: 0.15,
+    roughness: 0.38,
+    metalness: 0.16,
     transparent: true,
-    opacity: 0.95,
+    opacity: 0.96,
   });
 
-  const bars = new THREE.InstancedMesh(geo, mat, COUNT);
-  bars.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-  scene.add(bars);
+  mat.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms);
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        attribute vec3 aCell;
+        uniform float uTime;
+        uniform vec2 uPointer;
+        uniform float uLift;
+        varying float vHeight;
+        varying float vTip;`
+      )
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        float h = 1.15
+          + sin(aCell.x * 0.42 + uTime * 0.85) * 0.85
+          + cos(aCell.y * 0.55 - uTime * 0.62) * 0.70
+          + sin(aCell.z * 0.50 - uTime * 1.25) * 0.55;
+        vec2 dp = aCell.xy - uPointer;
+        h += exp(-dot(dp, dp) / 3.4) * 2.1 * uLift;
+        h = max(h, 0.12);
+        vHeight = h;
+        vTip = position.y;
+        transformed.y *= h;`
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        uniform vec3 uGlow;
+        uniform float uGlowAmt;
+        varying float vHeight;
+        varying float vTip;`
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        totalEmissiveRadiance += uGlow * uGlowAmt * smoothstep(2.3, 3.7, vHeight) * vTip * vTip;`
+      );
+  };
 
-  const dummy = new THREE.Object3D();
-  const layout = new Float32Array(COUNT * 3);
+  const bars = new THREE.InstancedMesh(geo, mat, COUNT);
+  bars.frustumCulled = false; // heights live in the shader; CPU bounds would be wrong
+  {
+    const dummy = new THREE.Object3D();
+    for (let n = 0; n < COUNT; n++) {
+      dummy.position.set(cells[n * 3], 0, cells[n * 3 + 1]);
+      dummy.updateMatrix();
+      bars.setMatrixAt(n, dummy.matrix);
+    }
+    bars.instanceMatrix.needsUpdate = true;
+  }
+  scene.add(bars);
 
   const paint = () => {
     const cA = new THREE.Color(P.a);
@@ -99,27 +180,15 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
     let i = 0;
     for (let c = 0; c < COLS; c++) {
       for (let r = 0; r < ROWS; r++) {
-        const t = (c / (COLS - 1)) * 0.65 + (r / (ROWS - 1)) * 0.35;
-        tmp.copy(cA).lerp(cB, Math.min(t * 1.5, 1));
-        if (t > 0.7) tmp.lerp(cC, ((t - 0.7) / 0.3) * 0.55);
+        const k = (c / (COLS - 1)) * 0.65 + (r / (ROWS - 1)) * 0.35;
+        tmp.copy(cA).lerp(cB, Math.min(k * 1.5, 1));
+        if (k > 0.7) tmp.lerp(cC, ((k - 0.7) / 0.3) * 0.55);
         bars.setColorAt(i, tmp);
         i++;
       }
     }
     bars.instanceColor.needsUpdate = true;
   };
-
-  let i = 0;
-  for (let c = 0; c < COLS; c++) {
-    for (let r = 0; r < ROWS; r++) {
-      const x = (c - (COLS - 1) / 2) * GAP;
-      const z = (r - (ROWS - 1) / 2) * GAP;
-      layout[i * 3] = x;
-      layout[i * 3 + 1] = z;
-      layout[i * 3 + 2] = Math.hypot(x, z);
-      i++;
-    }
-  }
   paint();
 
   /* ── Point field ─────────────────────────────────────────── */
@@ -144,20 +213,32 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   scene.add(stars);
 
   /* ── State ───────────────────────────────────────────────── */
-  const pointer = { x: 0, y: 0 };
+  const pointer = { x: 0, y: 0, inside: false, ndc: new THREE.Vector2() };
   const eased = { x: 0, y: 0 };
+  const ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.1);
+  const ray = new THREE.Raycaster();
+  const hit = new THREE.Vector3();
+  const swell = new THREE.Vector2(0, 0);
+  let lift = 0;
   let scrollT = 0;
   let animate = motion;
-  let t = 0;
+  let t = 1.2; // a pose with visible relief, so the frozen state still reads
 
   window.addEventListener(
     'pointermove',
     (e) => {
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+      const r = canvas.getBoundingClientRect();
+      pointer.inside =
+        e.pointerType === 'mouse' && e.clientY >= r.top && e.clientY <= r.bottom && e.clientX >= r.left && e.clientX <= r.right;
+      if (pointer.inside) {
+        pointer.ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      }
     },
     { passive: true }
   );
+  document.documentElement.addEventListener('pointerleave', () => (pointer.inside = false));
   window.addEventListener(
     'scroll',
     () => {
@@ -180,31 +261,7 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   ro.observe(canvas);
 
   /* ── Draw ────────────────────────────────────────────────── */
-  // Bar heights depend only on `t`. When the scene is frozen (reduced
-  // motion) a scroll or resize still needs a redraw, but re-solving 1040
-  // wave equations for an unchanged `t` would be pure waste.
-  let barsDirty = true;
-
   function draw() {
-    if (barsDirty) {
-      for (let n = 0; n < COUNT; n++) {
-        const x = layout[n * 3];
-        const z = layout[n * 3 + 1];
-        const d = layout[n * 3 + 2];
-        const h =
-          1.15 +
-          Math.sin(x * 0.42 + t * 0.85) * 0.85 +
-          Math.cos(z * 0.55 - t * 0.62) * 0.7 +
-          Math.sin(d * 0.5 - t * 1.25) * 0.55;
-        dummy.position.set(x, 0, z);
-        dummy.scale.set(1, Math.max(h, 0.12), 1);
-        dummy.updateMatrix();
-        bars.setMatrixAt(n, dummy.matrix);
-      }
-      bars.instanceMatrix.needsUpdate = true;
-      barsDirty = animate;
-    }
-
     if (animate) {
       eased.x += (pointer.x - eased.x) * 0.045;
       eased.y += (pointer.y - eased.y) * 0.045;
@@ -216,6 +273,23 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
 
     bars.rotation.y = Math.sin(t * 0.08) * 0.09;
     stars.rotation.y = t * 0.012;
+    bars.updateMatrixWorld();
+
+    // Swell follows the cursor across the field, in the bars' own space.
+    const want = animate && pointer.inside && scrollT < 0.9 ? 1 : 0;
+    if (want) {
+      camera.updateMatrixWorld();
+      ray.setFromCamera(pointer.ndc, camera);
+      if (ray.ray.intersectPlane(ground, hit)) {
+        bars.worldToLocal(hit);
+        swell.x += (hit.x - swell.x) * 0.12;
+        swell.y += (hit.z - swell.y) * 0.12;
+      }
+    }
+    lift += (want - lift) * 0.06;
+    uniforms.uPointer.value.copy(swell);
+    uniforms.uLift.value = lift;
+    uniforms.uTime.value = t;
 
     renderer.render(scene, camera);
   }
@@ -231,7 +305,6 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
     // Own accumulator: a backgrounded tab must not dump its whole gap
     // into the wave phase and snap the terrain on resume.
     t += Math.min(clock.getDelta(), 0.05);
-    barsDirty = true;
     draw();
   };
   const play = () => {
@@ -259,7 +332,6 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
   });
 
   resize();
-  t = 1.2; // a pose with visible relief, so the frozen state still reads
   draw();
   play();
   canvas.classList.add('is-ready');
@@ -278,6 +350,8 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
       key.intensity = P.key;
       rim.color.setHex(P.rimColor);
       rim.intensity = P.rim;
+      uniforms.uGlow.value.setHex(P.glow);
+      uniforms.uGlowAmt.value = P.glowAmt;
       starMat.color.setHex(P.star);
       starMat.opacity = P.starOpacity;
       paint();
@@ -288,7 +362,7 @@ export function initHero(canvas, { theme = 'dark', motion = true } = {}) {
       if (on) play();
       else {
         pause();
-        barsDirty = true;
+        lift = 0;
         draw();
       }
     },

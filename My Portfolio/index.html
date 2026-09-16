@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-motion="full">
+<html lang="en" dir="ltr" data-theme="dark" data-motion="full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f6f5f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#080a10" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#eef1f6" media="(prefers-color-scheme: light)" />
 
     <title>Awais Ali | BI Analyst</title>
     <meta
@@ -23,17 +23,30 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://awaisx.netlify.app/images/portrait-2026.jpg" />
 
-    <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="images/mark-2026.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="images/portrait-2026-sm.jpg" />
 
-    <!-- Theme + motion resolved before first paint, so there is no flash. -->
+    <!-- Theme, motion and language resolved before first paint, so the page
+         never flashes the wrong colours or flips direction after load.
+         ?lang=ar makes an Arabic link shareable. -->
     <script>
       (() => {
         const d = document.documentElement;
-        const t = localStorage.getItem('theme');
-        d.dataset.theme = t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        const m = localStorage.getItem('motion');
-        d.dataset.motion = m || (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduced' : 'full');
+        let ls = {};
+        try { ls = { theme: localStorage.getItem('theme'), motion: localStorage.getItem('motion'), lang: localStorage.getItem('lang') }; } catch (e) {}
+        d.dataset.theme = ls.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        d.dataset.motion = ls.motion || (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduced' : 'full');
+        const q = new URLSearchParams(location.search).get('lang');
+        const lang = q === 'ar' || q === 'en' ? q : ls.lang === 'ar' ? 'ar' : 'en';
+        d.lang = lang;
+        d.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        if (lang === 'ar') {
+          const l = document.createElement('link');
+          l.rel = 'stylesheet';
+          l.id = 'font-ar';
+          l.href = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap';
+          document.head.appendChild(l);
+        }
       })();
     </script>
 
@@ -58,6 +71,7 @@
         "name": "Awais Ali",
         "jobTitle": "Assistant Manager Business Intelligence",
         "worksFor": { "@type": "Organization", "name": "Beaconhouse Group" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Management and Technology" },
         "email": "mailto:ds.awaisali@gmail.com",
         "telephone": "+923064086446",
         "address": { "@type": "PostalAddress", "addressLocality": "Lahore", "addressCountry": "PK" },
@@ -67,7 +81,7 @@
   </head>
 
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main" data-i18n="ui.skip">Skip to content</a>
 
     <!-- Refraction filter used by the glass panels. -->
     <svg class="defs" aria-hidden="true" focusable="false">
@@ -79,9 +93,9 @@
     </svg>
 
     <!-- ── Preloader ───────────────────────────────────────── -->
-    <div class="preloader" id="preloader" role="status" aria-label="Loading">
+    <div class="preloader" id="preloader" role="status" data-i18n-attr="aria-label:ui.loading" aria-label="Loading">
       <div class="preloader__box lg">
-        <span class="preloader__mark">Loading…</span>
+        <span class="preloader__mark" data-i18n="ui.loading">Loading…</span>
         <span class="preloader__bar"><i id="preloader-fill"></i></span>
       </div>
     </div>
@@ -90,8 +104,8 @@
 
     <!-- ── Header ──────────────────────────────────────────── -->
     <header class="header" id="header">
-      <nav class="nav lg" aria-label="Primary">
-        <a href="#top" class="brand" aria-label="Awais Ali — back to top">
+      <nav class="nav lg" data-i18n-attr="aria-label:ui.primary" aria-label="Primary">
+        <a href="#top" class="brand" data-i18n-attr="aria-label:ui.brand" aria-label="Awais Ali — back to top">
           <!-- Same three-bar glyph as the favicon, so the tab icon and the
                header read as one mark. -->
           <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
@@ -102,28 +116,34 @@
         </a>
 
         <ul class="nav__list" id="nav-list">
-          <li><a href="#about" data-nav>About</a></li>
-          <li><a href="#work" data-nav>Work</a></li>
-          <li><a href="#stack" data-nav>Stack</a></li>
-          <li><a href="#projects" data-nav>Projects</a></li>
-          <li><a href="#contact" data-nav>Contact</a></li>
+          <li><a href="#about" data-nav data-i18n="nav.about">About</a></li>
+          <li><a href="#work" data-nav data-i18n="nav.work">Work</a></li>
+          <li><a href="#stack" data-nav data-i18n="nav.stack">Stack</a></li>
+          <li><a href="#projects" data-nav data-i18n="nav.projects">Projects</a></li>
+          <li><a href="#contact" data-nav data-i18n="nav.contact">Contact</a></li>
           <li class="nav__pill" aria-hidden="true"></li>
         </ul>
 
         <div class="nav__tools">
-          <button class="icon-btn" id="motion-toggle" type="button" aria-pressed="true" title="Toggle animation">
+          <!-- Shows the language you would switch TO, written in that
+               language, so either reader can find it. -->
+          <button class="lang-btn" id="lang-toggle" type="button">
+            <span class="lang-btn__to-ar" lang="ar">عربي</span>
+            <span class="lang-btn__to-en" lang="en">EN</span>
+          </button>
+          <button class="icon-btn" id="motion-toggle" type="button" aria-pressed="true" data-i18n-attr="title:ui.motion" title="Toggle animation">
             <svg class="i-motion" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4" /></svg>
             <svg class="i-still" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18" /></svg>
-            <span class="sr-only">Toggle animation</span>
+            <span class="sr-only" data-i18n="ui.motion">Toggle animation</span>
           </button>
-          <button class="icon-btn" id="theme-toggle" type="button" title="Toggle theme">
+          <button class="icon-btn" id="theme-toggle" type="button" data-i18n-attr="title:ui.theme" title="Toggle theme">
             <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" /></svg>
             <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" /></svg>
-            <span class="sr-only">Toggle theme</span>
+            <span class="sr-only" data-i18n="ui.theme">Toggle theme</span>
           </button>
           <button class="icon-btn nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list">
             <span></span><span></span>
-            <span class="sr-only">Menu</span>
+            <span class="sr-only" data-i18n="ui.menu">Menu</span>
           </button>
         </div>
       </nav>
@@ -139,21 +159,21 @@
           <div class="hero__lead">
             <p class="kicker" data-reveal>
               <span class="pip" aria-hidden="true"></span>
-              Available for BI &amp; Data Analyst roles
+              <span data-i18n="hero.kicker">Available for BI &amp; Data Analyst roles</span>
             </p>
 
-            <h1 class="hero__name" data-reveal data-reveal-delay="1"><span data-split>Awais Ali</span></h1>
+            <h1 class="hero__name" data-reveal data-reveal-delay="1"><span data-split data-i18n-split="hero.name">Awais Ali</span></h1>
 
-            <p class="hero__role" data-reveal data-reveal-delay="2">Business Intelligence Analyst</p>
+            <p class="hero__role" data-reveal data-reveal-delay="2" data-i18n="hero.role">Business Intelligence Analyst</p>
 
-            <p class="hero__blurb" data-reveal data-reveal-delay="3">
+            <p class="hero__blurb" data-reveal data-reveal-delay="3" data-i18n="hero.blurb">
               I build semantic models, ETL pipelines and dashboards — currently at
               Beaconhouse Group in Lahore.
             </p>
 
             <div class="hero__cta" data-reveal data-reveal-delay="4">
-              <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-              <a class="btn btn--line" href="#projects">View projects</a>
+              <a class="btn btn--solid" href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener" data-i18n="hero.resume">Resume</a>
+              <a class="btn btn--line" href="#projects" data-i18n="hero.projects">View projects</a>
             </div>
           </div>
 
@@ -161,7 +181,7 @@
             <div class="portrait lg" data-tilt data-tilt-max="10">
               <picture>
                 <source srcset="images/portrait-2026.webp" type="image/webp" />
-                <img src="images/portrait-2026.jpg" alt="Awais Ali" width="673" height="673" fetchpriority="high" />
+                <img src="images/portrait-2026.jpg" data-i18n-attr="alt:hero.name" alt="Awais Ali" width="673" height="673" fetchpriority="high" />
               </picture>
             </div>
           </div>
@@ -169,10 +189,10 @@
 
         <div class="hero__stripwrap">
           <dl class="hero__meta lg" data-reveal data-reveal-delay="5">
-            <div><dt class="mono">Experience</dt><dd>3+ years in BI</dd></div>
-            <div><dt class="mono">Currently</dt><dd>Beaconhouse Group</dd></div>
-            <div><dt class="mono">Focus</dt><dd>Semantic models · ETL · Dashboards</dd></div>
-            <div><dt class="mono">Based in</dt><dd>Lahore, Pakistan</dd></div>
+            <div><dt class="mono" data-i18n="meta.expK">Experience</dt><dd data-i18n="meta.expV">3+ years in BI</dd></div>
+            <div><dt class="mono" data-i18n="meta.curK">Currently</dt><dd data-i18n="meta.curV">Beaconhouse Group</dd></div>
+            <div><dt class="mono" data-i18n="meta.focK">Focus</dt><dd data-i18n="meta.focV">Semantic models · ETL · Dashboards</dd></div>
+            <div><dt class="mono" data-i18n="meta.basK">Based in</dt><dd data-i18n="meta.basV">Lahore, Pakistan</dd></div>
           </dl>
         </div>
       </section>
@@ -180,33 +200,65 @@
       <!-- ── About ─────────────────────────────────────────── -->
       <section id="about" class="section">
         <div class="wrap grid-2">
-          <div class="col-label"><span class="mono">01</span><span class="mono">About</span></div>
+          <div class="col-label"><span class="mono">01</span><span class="mono" data-i18n="nav.about">About</span></div>
           <div class="col-body">
-            <p class="big" data-reveal>
+            <p class="big" data-reveal data-i18n="about.big">
               I work between source systems and the people who need an answer by Monday.
             </p>
-            <p data-reveal data-reveal-delay="1">
+            <p data-reveal data-reveal-delay="1" data-i18n="about.body">
               Star-schema models, DAX and SQL, automated ETL in BigQuery and Power Query.
               Across education, marketing, e-commerce, finance and supply chain.
             </p>
 
-            <dl class="facts" data-reveal data-reveal-delay="2">
-              <div><dt>Role</dt><dd>Assistant Manager, BI</dd></div>
-              <div><dt>Company</dt><dd>Beaconhouse Group</dd></div>
-              <div><dt>Degree</dt><dd>BS Artificial Intelligence, UMT</dd></div>
-              <div><dt>Open to</dt><dd>On-site · Hybrid · Remote</dd></div>
+            <!-- Proof before profile: the numbers a hiring manager scans for. -->
+            <ul class="impact" data-reveal data-reveal-delay="2">
+              <li><span class="impact__n" data-count="40" data-suffix="%">40%</span><span class="impact__l" data-i18n="about.m1">less manual reporting</span></li>
+              <li><span class="impact__n" data-count="35" data-suffix="%">35%</span><span class="impact__l" data-i18n="about.m2">faster analysis</span></li>
+              <li><span class="impact__n" data-count="30" data-suffix="%">30%</span><span class="impact__l" data-i18n="about.m3">faster report refresh</span></li>
+              <li><span class="impact__n" data-count="3" data-suffix="+">3+</span><span class="impact__l" data-i18n="about.m4">years building BI</span></li>
+            </ul>
+
+            <dl class="facts" data-reveal data-reveal-delay="3">
+              <div><dt data-i18n="about.roleK">Role</dt><dd data-i18n="about.roleV">Assistant Manager, BI</dd></div>
+              <div><dt data-i18n="about.coK">Company</dt><dd data-i18n="meta.curV">Beaconhouse Group</dd></div>
+              <div><dt data-i18n="about.degK">Degree</dt><dd data-i18n="about.degV">BS Artificial Intelligence, UMT</dd></div>
+              <div><dt data-i18n="about.openK">Open to</dt><dd data-i18n="about.openV">On-site · Hybrid · Remote</dd></div>
             </dl>
           </div>
         </div>
       </section>
 
       <!-- ── 3D star schema ────────────────────────────────── -->
-      <section class="schema">
-        <div class="wrap schema__wrap">
-          <canvas id="schema-canvas" class="schema__canvas" aria-label="Rotating 3D star schema model" role="img"></canvas>
-          <div class="schema__cap">
-            <span class="mono">Star schema</span>
-            <p>Fact table at the centre, conformed dimensions around it. Drag to rotate.</p>
+      <section class="schema" aria-labelledby="schema-title">
+        <div class="wrap">
+          <div class="schema__intro">
+            <span class="mono schema__eyebrow" data-reveal data-i18n="schema.eyebrow">Data model</span>
+            <h2 class="big" id="schema-title" data-reveal data-reveal-delay="1" data-i18n="schema.title">Every dashboard I ship starts as a model like this.</h2>
+            <p data-reveal data-reveal-delay="2" data-i18n="schema.sub">One fact table at the grain of the business, conformed dimensions around it. Drag to rotate, then pick a table to inspect it.</p>
+          </div>
+
+          <div class="schema__stage lg" data-reveal data-reveal-delay="2">
+            <canvas id="schema-canvas" class="schema__canvas" role="img" data-i18n-attr="aria-label:schema.canvas" aria-label="Interactive 3D star schema: a sales fact table joined to five dimension tables"></canvas>
+
+            <aside class="inspector" id="inspector" aria-live="polite">
+              <div class="inspector__head">
+                <span class="mono inspector__kind" id="inspector-kind"></span>
+                <h3 class="inspector__name" id="inspector-name" dir="ltr"></h3>
+              </div>
+              <p class="inspector__desc" id="inspector-desc"></p>
+              <p class="inspector__rel mono" id="inspector-rel"></p>
+              <ul class="inspector__cols" id="inspector-cols" dir="ltr"></ul>
+              <pre class="inspector__dax" id="inspector-dax" dir="ltr" hidden></pre>
+            </aside>
+
+            <div class="schema__tables" role="group" data-i18n-attr="aria-label:schema.pick" aria-label="Choose a table">
+              <button type="button" data-table="FACT_SALES" aria-pressed="true">FACT_SALES</button>
+              <button type="button" data-table="DIM_DATE" aria-pressed="false">DIM_DATE</button>
+              <button type="button" data-table="DIM_PRODUCT" aria-pressed="false">DIM_PRODUCT</button>
+              <button type="button" data-table="DIM_CUSTOMER" aria-pressed="false">DIM_CUSTOMER</button>
+              <button type="button" data-table="DIM_STORE" aria-pressed="false">DIM_STORE</button>
+              <button type="button" data-table="DIM_CHANNEL" aria-pressed="false">DIM_CHANNEL</button>
+            </div>
           </div>
         </div>
       </section>
@@ -214,32 +266,32 @@
       <!-- ── Work ──────────────────────────────────────────── -->
       <section id="work" class="section">
         <div class="wrap grid-2">
-          <div class="col-label"><span class="mono">02</span><span class="mono">Work</span></div>
+          <div class="col-label"><span class="mono">02</span><span class="mono" data-i18n="nav.work">Work</span></div>
           <div class="col-body">
             <ol class="roles">
               <li class="role lg" data-reveal data-tilt data-tilt-max="3">
                 <div class="role__head">
-                  <h2>Assistant Manager, Business Intelligence</h2>
-                  <span class="mono">2025 — now</span>
+                  <h2 data-i18n="work.r1.title">Assistant Manager, Business Intelligence</h2>
+                  <span class="mono" data-i18n="work.r1.when">2025 — now</span>
                 </div>
-                <p class="role__org">Beaconhouse Group · Lahore</p>
+                <p class="role__org" data-i18n="work.r1.org">Beaconhouse Group · Lahore</p>
                 <ul class="terse">
-                  <li>BI pipelines across Looker Studio and Power BI.</li>
-                  <li>Automated ETL in BigQuery, Python and Power Query — <b>40% less</b> manual reporting.</li>
-                  <li>Governance, documentation, mentoring analysts.</li>
+                  <li data-i18n="work.r1.a">BI pipelines across Looker Studio and Power BI.</li>
+                  <li data-i18n="work.r1.b">Automated ETL in BigQuery, Python and Power Query — <b>40% less</b> manual reporting.</li>
+                  <li data-i18n="work.r1.c">Governance, documentation, mentoring analysts.</li>
                 </ul>
               </li>
 
               <li class="role lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="3">
                 <div class="role__head">
-                  <h2>Business Intelligence Developer</h2>
+                  <h2 data-i18n="work.r2.title">Business Intelligence Developer</h2>
                   <span class="mono">2023 — 2025</span>
                 </div>
-                <p class="role__org">Kaswa.Ai · Remote</p>
+                <p class="role__org" data-i18n="work.r2.org">Kaswa.Ai · Remote</p>
                 <ul class="terse">
-                  <li>Power BI dashboards with drill-through and advanced DAX.</li>
-                  <li>Query and pipeline optimisation — <b>35% faster</b> analysis.</li>
-                  <li>Ad-hoc SQL analysis for non-technical stakeholders.</li>
+                  <li data-i18n="work.r2.a">Power BI dashboards with drill-through and advanced DAX.</li>
+                  <li data-i18n="work.r2.b">Query and pipeline optimisation — <b>35% faster</b> analysis.</li>
+                  <li data-i18n="work.r2.c">Ad-hoc SQL analysis for non-technical stakeholders.</li>
                 </ul>
               </li>
             </ol>
@@ -247,42 +299,70 @@
         </div>
       </section>
 
-      <!-- ── Stack ─────────────────────────────────────────── -->
+      <!-- ── Stack, told as the path data takes ────────────── -->
       <section id="stack" class="section">
-        <div class="wrap grid-2">
-          <div class="col-label"><span class="mono">03</span><span class="mono">Stack</span></div>
-          <div class="col-body">
-            <div class="stack">
-              <div class="stack__row" data-reveal>
-                <span class="mono stack__k">Visualisation</span>
-                <p>Power BI · Looker Studio · Excel</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="1">
-                <span class="mono stack__k">Modeling</span>
-                <p>Star schema · Fact &amp; dimension · Semantic models · KPI design</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="2">
-                <span class="mono stack__k">Languages</span>
-                <p>SQL · Python · DAX · Power Query (M)</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="3">
-                <span class="mono stack__k">Data</span>
-                <p>SQL Server · MySQL · BigQuery · GCP</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="4">
-                <span class="mono stack__k">Pipelines</span>
-                <p>Microsoft Fabric · SSIS · Power Query · Warehousing</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="5">
-                <span class="mono stack__k">Production</span>
-                <p>Time intelligence · Row-level security · Scheduled refresh · Gateways</p>
-              </div>
-              <div class="stack__row" data-reveal data-reveal-delay="6">
-                <span class="mono stack__k">Certified</span>
-                <p>Power BI Essential · DAX Modeling · Microsoft Fabric · SQL Server · SSIS</p>
-              </div>
+        <div class="wrap">
+          <div class="grid-2">
+            <div class="col-label"><span class="mono">03</span><span class="mono" data-i18n="nav.stack">Stack</span></div>
+            <div class="col-body">
+              <p class="big" data-reveal data-i18n="stack.big">How data moves through my stack — from raw exports to decisions.</p>
             </div>
           </div>
+
+          <ol class="pipe" id="pipe">
+            <li class="pipe__rail" aria-hidden="true"><span class="pipe__fill"></span><span class="pipe__packet"></span></li>
+
+            <li class="stage lg" data-reveal>
+              <span class="stage__node" aria-hidden="true">01</span>
+              <h3 class="stage__name" data-i18n="stack.s1.name">Ingest</h3>
+              <p class="stage__story" data-i18n="stack.s1.story">Data arrives scattered: databases, spreadsheets and exports that never quite agree.</p>
+              <ul class="stage__tools" dir="ltr"><li>SQL Server</li><li>MySQL</li><li>Google Sheets</li><li>Excel</li></ul>
+              <p class="stage__proof" data-i18n="stack.s1.proof">5 industries served</p>
+            </li>
+
+            <li class="stage lg" data-reveal data-reveal-delay="1">
+              <span class="stage__node" aria-hidden="true">02</span>
+              <h3 class="stage__name" data-i18n="stack.s2.name">Transform</h3>
+              <p class="stage__story" data-i18n="stack.s2.story">Automated pipelines clean, join and schedule it. Nobody copies and pastes.</p>
+              <ul class="stage__tools" dir="ltr"><li>BigQuery</li><li>Python</li><li>Power Query</li><li>SSIS</li><li>Fabric</li><li>Apps Script</li></ul>
+              <p class="stage__proof" data-i18n="stack.s2.proof">40% less manual work</p>
+            </li>
+
+            <li class="stage lg" data-reveal data-reveal-delay="2">
+              <span class="stage__node" aria-hidden="true">03</span>
+              <h3 class="stage__name" data-i18n="stack.s3.name">Model</h3>
+              <p class="stage__story" data-i18n="stack.s3.story">One certified semantic model, so every team argues about decisions — not numbers.</p>
+              <ul class="stage__tools" dir="ltr"><li>Star schema</li><li>DAX</li><li>Semantic models</li><li>RLS</li></ul>
+              <p class="stage__proof" data-i18n="stack.s3.proof">Duplicate measures retired</p>
+            </li>
+
+            <li class="stage lg" data-reveal data-reveal-delay="3">
+              <span class="stage__node" aria-hidden="true">04</span>
+              <h3 class="stage__name" data-i18n="stack.s4.name">Visualise</h3>
+              <p class="stage__story" data-i18n="stack.s4.story">Dashboards that answer “are we okay?” before “why?” — with drill-through for the why.</p>
+              <ul class="stage__tools" dir="ltr"><li>Power BI</li><li>Looker Studio</li><li>Excel</li></ul>
+              <p class="stage__proof" data-i18n="stack.s4.proof">35% faster analysis</p>
+            </li>
+
+            <li class="stage lg" data-reveal data-reveal-delay="4">
+              <span class="stage__node" aria-hidden="true">05</span>
+              <h3 class="stage__name" data-i18n="stack.s5.name">Deliver</h3>
+              <p class="stage__story" data-i18n="stack.s5.story">Live, governed reports on a refresh schedule replace the monthly spreadsheet review.</p>
+              <ul class="stage__tools" dir="ltr"><li>Scheduled refresh</li><li>Gateways</li><li>Governance</li></ul>
+              <p class="stage__proof" data-i18n="stack.s5.proof">30% faster refresh</p>
+            </li>
+          </ol>
+
+          <dl class="grounding" data-reveal>
+            <div>
+              <dt class="mono" data-i18n="stack.foundK">Foundation</dt>
+              <dd data-i18n="stack.foundV">BS Artificial Intelligence — machine learning, statistics, data mining.</dd>
+            </div>
+            <div>
+              <dt class="mono" data-i18n="stack.certK">Certified</dt>
+              <dd dir="ltr">Power BI Essential · DAX Modeling · Microsoft Fabric · SQL Server · SSIS</dd>
+            </div>
+          </dl>
         </div>
       </section>
 
@@ -290,75 +370,79 @@
       <section id="projects" class="section">
         <div class="wrap">
           <div class="grid-2">
-            <div class="col-label"><span class="mono">04</span><span class="mono">Projects</span></div>
-            <div class="col-body"><p class="big" data-reveal>Six builds. Live report where it's publicly shareable.</p></div>
+            <div class="col-label"><span class="mono">04</span><span class="mono" data-i18n="nav.projects">Projects</span></div>
+            <div class="col-body"><p class="big" data-reveal data-i18n="proj.big">Six builds. Live report where it's publicly shareable.</p></div>
           </div>
 
           <div class="projects">
             <article class="pc lg" data-reveal data-tilt data-tilt-max="7"
               data-title="Customer Support / Call Centre"
               data-stack="Power BI · DAX"
+              data-i18n-attr="data-title:proj.p1.title"
               data-embed="https://app.powerbi.com/view?r=eyJrIjoiNWUzYTI1NTYtODA4ZS00NmU0LTk4MjMtOWIzZmY3ZjA2NmE4IiwidCI6IjRhYTNlNzM3LTdjZjUtNDM4Ni1hMjM5LWI1Y2VkY2Q2MjVmMSIsImMiOjl9">
               <div class="pc__media"><img src="images/projects/customer support.png" alt="" loading="lazy" data-depth="18" /></div>
               <div class="pc__body">
-                <h3 data-depth="26">Customer Support / Call Centre</h3>
-                <p data-depth="20">Handle time, first-call resolution, abandonment, agent scorecards.</p>
+                <h3 data-depth="26" data-i18n="proj.p1.title">Customer Support / Call Centre</h3>
+                <p data-depth="20" data-i18n="proj.p1.sum">Handle time, first-call resolution, abandonment, agent scorecards.</p>
                 <div class="pc__foot" data-depth="30">
-                  <span class="mono">Power BI · DAX</span>
-                  <span class="dot dot--live"></span>
+                  <span class="mono" dir="ltr">Power BI · DAX</span>
+                  <span class="live"><span class="dot dot--live"></span><span class="mono" data-i18n="proj.live">Live report</span></span>
                 </div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Star-schema model with a dedicated date dimension driving time intelligence.</li>
-                  <li>DAX layer for rolling averages, YoY deltas and target variance.</li>
-                  <li>Drill-through from team scorecard to individual agent.</li>
-                  <li>Replaced a monthly spreadsheet review with a live report.</li>
+                  <li data-i18n="proj.p1.d1">Star-schema model with a dedicated date dimension driving time intelligence.</li>
+                  <li data-i18n="proj.p1.d2">DAX layer for rolling averages, YoY deltas and target variance.</li>
+                  <li data-i18n="proj.p1.d3">Drill-through from team scorecard to individual agent.</li>
+                  <li data-i18n="proj.p1.d4">Replaced a monthly spreadsheet review with a live report.</li>
                 </ul>
               </template>
             </article>
 
             <article class="pc lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="7"
               data-title="E-commerce &amp; Finance"
-              data-stack="Power BI · SQL · Power Query">
+              data-stack="Power BI · SQL · Power Query"
+              data-i18n-attr="data-title:proj.p2.title">
               <div class="pc__media"><img src="images/projects/ecom.png" alt="" loading="lazy" data-depth="18" /></div>
               <div class="pc__body">
-                <h3 data-depth="26">E-commerce &amp; Finance</h3>
-                <p data-depth="20">Revenue, conversion, retention and AOV in one certified model.</p>
-                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · SQL</span></div>
+                <h3 data-depth="26" data-i18n="proj.p2.title">E-commerce &amp; Finance</h3>
+                <p data-depth="20" data-i18n="proj.p2.sum">Revenue, conversion, retention and AOV in one certified model.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono" dir="ltr">Power BI · SQL</span></div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Joined storefront behaviour to finance outcomes in a single model.</li>
-                  <li>Preserved query folding — <b>30% faster</b> refresh.</li>
-                  <li>Consolidated duplicate sales and finance measures into one certified table.</li>
+                  <li data-i18n="proj.p2.d1">Joined storefront behaviour to finance outcomes in a single model.</li>
+                  <li data-i18n="proj.p2.d2">Preserved query folding — <b>30% faster</b> refresh.</li>
+                  <li data-i18n="proj.p2.d3">Consolidated duplicate sales and finance measures into one certified table.</li>
                 </ul>
               </template>
             </article>
 
             <article class="pc lg" data-reveal data-reveal-delay="2" data-tilt data-tilt-max="7"
               data-title="Healthcare Operations"
-              data-stack="Power BI · DAX">
+              data-stack="Power BI · DAX"
+              data-i18n-attr="data-title:proj.p3.title">
               <div class="pc__media"><img src="images/projects/HC.png" alt="" loading="lazy" data-depth="18" /></div>
               <div class="pc__body">
-                <h3 data-depth="26">Healthcare Operations</h3>
-                <p data-depth="20">Admissions, length of stay, bed occupancy, outcomes.</p>
-                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · DAX</span></div>
+                <h3 data-depth="26" data-i18n="proj.p3.title">Healthcare Operations</h3>
+                <p data-depth="20" data-i18n="proj.p3.sum">Admissions, length of stay, bed occupancy, outcomes.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono" dir="ltr">Power BI · DAX</span></div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Occupancy against capacity with early-warning thresholds.</li>
-                  <li>Length of stay by department, trended.</li>
-                  <li>Layout answers "are we okay?" before "why?".</li>
+                  <li data-i18n="proj.p3.d1">Occupancy against capacity with early-warning thresholds.</li>
+                  <li data-i18n="proj.p3.d2">Length of stay by department, trended.</li>
+                  <li data-i18n="proj.p3.d3">Layout answers "are we okay?" before "why?".</li>
                 </ul>
               </template>
             </article>
 
             <article class="pc pc--art lg" data-reveal data-tilt data-tilt-max="7"
-              data-title="Supply Chain Analytics" data-stack="Power BI · SQL · DAX">
+              data-title="Supply Chain Analytics" data-stack="Power BI · SQL · DAX"
+              data-i18n-attr="data-title:proj.p4.title">
               <div class="pc__media">
                 <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
                   <g class="art-stroke"><path d="M20 210h360M20 160h360M20 110h360M20 60h360" /></g>
@@ -370,22 +454,23 @@
                 </svg>
               </div>
               <div class="pc__body">
-                <h3 data-depth="26">Supply Chain Analytics</h3>
-                <p data-depth="20">Delivery and logistics KPIs on a conformed model.</p>
-                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · SQL</span></div>
+                <h3 data-depth="26" data-i18n="proj.p4.title">Supply Chain Analytics</h3>
+                <p data-depth="20" data-i18n="proj.p4.sum">Delivery and logistics KPIs on a conformed model.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono" dir="ltr">Power BI · SQL</span></div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Conformed dimensions across shipments, routes and vendors.</li>
-                  <li>On-time delivery, dwell time, cost per shipment against target.</li>
-                  <li>ETL and query tuning — <b>30% lower</b> latency.</li>
+                  <li data-i18n="proj.p4.d1">Conformed dimensions across shipments, routes and vendors.</li>
+                  <li data-i18n="proj.p4.d2">On-time delivery, dwell time, cost per shipment against target.</li>
+                  <li data-i18n="proj.p4.d3">ETL and query tuning — <b>30% lower</b> latency.</li>
                 </ul>
               </template>
             </article>
 
             <article class="pc pc--art lg" data-reveal data-reveal-delay="1" data-tilt data-tilt-max="7"
-              data-title="Digital Marketing Attribution" data-stack="Power BI · Python">
+              data-title="Digital Marketing Attribution" data-stack="Power BI · Python"
+              data-i18n-attr="data-title:proj.p5.title">
               <div class="pc__media">
                 <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
                   <g class="art-fill">
@@ -395,22 +480,23 @@
                 </svg>
               </div>
               <div class="pc__body">
-                <h3 data-depth="26">Digital Marketing Attribution</h3>
-                <p data-depth="20">Multi-touch attribution replacing last-click.</p>
-                <div class="pc__foot" data-depth="30"><span class="mono">Power BI · Python</span></div>
+                <h3 data-depth="26" data-i18n="proj.p5.title">Digital Marketing Attribution</h3>
+                <p data-depth="20" data-i18n="proj.p5.sum">Multi-touch attribution replacing last-click.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono" dir="ltr">Power BI · Python</span></div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Attribution modelled in Python, surfaced in Power BI.</li>
-                  <li>Channel performance by assisted conversion, not last touch.</li>
-                  <li>Spend reallocated toward channels that actually convert.</li>
+                  <li data-i18n="proj.p5.d1">Attribution modelled in Python, surfaced in Power BI.</li>
+                  <li data-i18n="proj.p5.d2">Channel performance by assisted conversion, not last touch.</li>
+                  <li data-i18n="proj.p5.d3">Spend reallocated toward channels that actually convert.</li>
                 </ul>
               </template>
             </article>
 
             <article class="pc pc--art lg" data-reveal data-reveal-delay="2" data-tilt data-tilt-max="7"
-              data-title="Sales Performance &amp; Trend" data-stack="Python · SQL">
+              data-title="Sales Performance &amp; Trend" data-stack="Python · SQL"
+              data-i18n-attr="data-title:proj.p6.title">
               <div class="pc__media">
                 <svg viewBox="0 0 400 250" aria-hidden="true" data-depth="14">
                   <path class="art-line" d="M20 196c40-10 60 18 100-10s60-86 100-66 60 86 160 18" />
@@ -418,16 +504,16 @@
                 </svg>
               </div>
               <div class="pc__body">
-                <h3 data-depth="26">Sales Performance &amp; Trend</h3>
-                <p data-depth="20">Seasonality isolated from trend, then automated.</p>
-                <div class="pc__foot" data-depth="30"><span class="mono">Python · SQL</span></div>
+                <h3 data-depth="26" data-i18n="proj.p6.title">Sales Performance &amp; Trend</h3>
+                <p data-depth="20" data-i18n="proj.p6.sum">Seasonality isolated from trend, then automated.</p>
+                <div class="pc__foot" data-depth="30"><span class="mono" dir="ltr">Python · SQL</span></div>
               </div>
-              <button class="pc__hit" type="button"><span class="sr-only">Open case study</span></button>
+              <button class="pc__hit" type="button"><span class="sr-only" data-i18n="proj.open">Open case study</span></button>
               <template class="pc__detail">
                 <ul class="terse">
-                  <li>Historical decomposition separating seasonal pattern from real trend.</li>
-                  <li>Python scripts re-run the analysis on schedule.</li>
-                  <li>Feeds standing performance monitoring, not a slide deck.</li>
+                  <li data-i18n="proj.p6.d1">Historical decomposition separating seasonal pattern from real trend.</li>
+                  <li data-i18n="proj.p6.d2">Python scripts re-run the analysis on schedule.</li>
+                  <li data-i18n="proj.p6.d3">Feeds standing performance monitoring, not a slide deck.</li>
                 </ul>
               </template>
             </article>
@@ -438,15 +524,15 @@
       <!-- ── Contact ───────────────────────────────────────── -->
       <section id="contact" class="section">
         <div class="wrap grid-2">
-          <div class="col-label"><span class="mono">05</span><span class="mono">Contact</span></div>
+          <div class="col-label"><span class="mono">05</span><span class="mono" data-i18n="nav.contact">Contact</span></div>
           <div class="col-body">
-            <p class="big" data-reveal>Open to BI and Data Analyst roles.</p>
+            <p class="big" data-reveal data-i18n="contact.big">Open to BI and Data Analyst roles.</p>
 
             <ul class="direct" data-reveal data-reveal-delay="1">
-              <li><span class="mono">Email</span><a href="mailto:ds.awaisali@gmail.com">ds.awaisali@gmail.com</a></li>
-              <li><span class="mono">LinkedIn</span><a href="https://www.linkedin.com/in/awaisali-bi" target="_blank" rel="noopener">/in/awaisali-bi</a></li>
-              <li><span class="mono">Phone</span><a href="tel:+923064086446">+92 306 4086446</a></li>
-              <li><span class="mono">Resume</span><a href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener">Download PDF</a></li>
+              <li><span class="mono" data-i18n="contact.email">Email</span><a href="mailto:ds.awaisali@gmail.com" dir="ltr">ds.awaisali@gmail.com</a></li>
+              <li><span class="mono" data-i18n="contact.linkedin">LinkedIn</span><a href="https://www.linkedin.com/in/awaisali-bi" target="_blank" rel="noopener" dir="ltr">/in/awaisali-bi</a></li>
+              <li><span class="mono" data-i18n="contact.phone">Phone</span><a href="tel:+923064086446" dir="ltr">+92 306 4086446</a></li>
+              <li><span class="mono" data-i18n="contact.resume">Resume</span><a href="docs/Awais_Ali_BI_Resume.pdf" target="_blank" rel="noopener" data-i18n="contact.pdf">Download PDF</a></li>
             </ul>
 
             <form
@@ -466,18 +552,18 @@
 
               <div class="field">
                 <input type="text" id="f-name" name="name" required placeholder=" " autocomplete="name" />
-                <label for="f-name">Name</label>
+                <label for="f-name" data-i18n="contact.name">Name</label>
               </div>
               <div class="field">
-                <input type="email" id="f-email" name="email" required placeholder=" " autocomplete="email" />
-                <label for="f-email">Email</label>
+                <input type="email" id="f-email" name="email" required placeholder=" " autocomplete="email" dir="ltr" />
+                <label for="f-email" data-i18n="contact.email">Email</label>
               </div>
               <div class="field">
-                <textarea id="f-message" name="message" rows="4" required placeholder=" "></textarea>
-                <label for="f-message">Message</label>
+                <textarea id="f-message" name="message" rows="4" required placeholder=" " dir="auto"></textarea>
+                <label for="f-message" data-i18n="contact.message">Message</label>
               </div>
 
-              <button type="submit" class="btn btn--solid" id="submit-btn"><span class="btn__label">Send</span></button>
+              <button type="submit" class="btn btn--solid" id="submit-btn"><span class="btn__label" data-i18n="contact.send">Send</span></button>
               <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
             </form>
           </div>
@@ -487,8 +573,8 @@
 
     <footer class="footer">
       <div class="wrap footer__inner">
-        <span class="mono">© <span id="year">2026</span> Awais Ali</span>
-        <a href="#top" class="mono">Top ↑</a>
+        <span class="mono">© <span id="year">2026</span> <span data-i18n="hero.name">Awais Ali</span></span>
+        <a href="#top" class="mono" data-i18n="ui.top">Top ↑</a>
       </div>
     </footer>
 
@@ -498,9 +584,9 @@
       <div class="modal__panel lg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button class="icon-btn modal__close" type="button" data-close>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          <span class="sr-only">Close</span>
+          <span class="sr-only" data-i18n="ui.close">Close</span>
         </button>
-        <span class="mono" id="modal-stack"></span>
+        <span class="mono" id="modal-stack" dir="ltr"></span>
         <h2 id="modal-title"></h2>
         <div id="modal-body"></div>
         <div class="modal__embed" id="modal-embed"></div>
@@ -510,36 +596,36 @@
     <!-- ── Chat assistant ──────────────────────────────────── -->
     <button class="chat-launcher lg" id="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l.9-4.4A8 8 0 1 1 20 12Z" /><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" /></svg>
-      <span class="chat-launcher__label">Ask about Awais</span>
+      <span class="chat-launcher__label" data-i18n="chat.title">Ask about Awais</span>
     </button>
 
     <section class="chat lg" id="chat-panel" role="dialog" aria-labelledby="chat-title" hidden>
       <header class="chat__head">
         <div>
-          <p class="chat__title" id="chat-title"><span class="dot--live" aria-hidden="true"></span>Ask about Awais</p>
-          <span class="mono">Portfolio assistant</span>
+          <p class="chat__title" id="chat-title"><span class="dot--live" aria-hidden="true"></span><span data-i18n="chat.title">Ask about Awais</span></p>
+          <span class="mono" data-i18n="chat.sub">Portfolio assistant</span>
         </div>
         <button class="icon-btn" id="chat-close" type="button">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          <span class="sr-only">Close chat</span>
+          <span class="sr-only" data-i18n="chat.close">Close chat</span>
         </button>
       </header>
 
       <div class="chat__log" id="chat-log" role="log" aria-live="polite"></div>
 
       <div class="chat__suggest" id="chat-suggest">
-        <button type="button" data-q="What does Awais do?">What does he do?</button>
-        <button type="button" data-q="What is his tech stack?">Tech stack</button>
-        <button type="button" data-q="Show me his projects">Projects</button>
-        <button type="button" data-q="How can I contact Awais?">Contact</button>
+        <button type="button" data-q="What does Awais do?" data-i18n-attr="data-q:chat.q1" data-i18n="chat.c1">What does he do?</button>
+        <button type="button" data-q="What is his tech stack?" data-i18n-attr="data-q:chat.q2" data-i18n="chat.c2">Tech stack</button>
+        <button type="button" data-q="Show me his projects" data-i18n-attr="data-q:chat.q3" data-i18n="chat.c3">Projects</button>
+        <button type="button" data-q="How can I contact Awais?" data-i18n-attr="data-q:chat.q4" data-i18n="chat.c4">Contact</button>
       </div>
 
       <form class="chat__form" id="chat-form">
-        <label class="sr-only" for="chat-input">Your question</label>
-        <input id="chat-input" type="text" maxlength="600" autocomplete="off" placeholder="Ask a question…" />
+        <label class="sr-only" for="chat-input" data-i18n="chat.label">Your question</label>
+        <input id="chat-input" type="text" maxlength="600" autocomplete="off" dir="auto" data-i18n-attr="placeholder:chat.placeholder" placeholder="Ask a question…" />
         <button class="chat__send" id="chat-send" type="submit">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          <span class="sr-only">Send</span>
+          <span class="sr-only" data-i18n="contact.send">Send</span>
         </button>
       </form>
     </section>

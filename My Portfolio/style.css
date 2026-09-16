@@ -1,12 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════
    Awais Ali — Portfolio
-   Type: Geist / Geist Mono.  Colour: warm neutral + one accent.
-   No gradients as decoration — the accent earns its place or stays off.
+   Type: Geist / Geist Mono (Latin), IBM Plex Sans Arabic (Arabic).
+   Colour: taken from the portrait — steel backdrop, navy suit, slate
+   tie, blue-white shirt. Every hue sits between 217° and 232°, so the
+   page and the photo read as one image. One accent, no decoration.
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --code: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --r-s: 10px;
   --r-m: 16px;
@@ -15,64 +18,75 @@
 
   --wrap: 1220px;
   --gutter: clamp(1.15rem, 4vw, 3.25rem);
-  --section-y: clamp(5.5rem, 11vw, 10rem);
+  --section-y: clamp(5rem, 9vw, 8.5rem);
   --nav-h: 58px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glass: cubic-bezier(0.34, 1.32, 0.64, 1);
 }
 
+/* Dark: the suit in low light. */
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0a0a0b;
-  --bg-2: #0f0f11;
-  --text: #f4f4f5;
-  --muted: #8b8b93;
-  --dim: #5c5c66;
-  --line: rgba(255, 255, 255, 0.1);
-  --line-2: rgba(255, 255, 255, 0.2);
+  --bg: #07090e;
+  --bg-2: #0d1017;
+  --text: #eceff6;
+  --muted: #8e96aa;
+  --dim: #737b90;
+  --line: rgba(196, 210, 240, 0.1);
+  --line-2: rgba(196, 210, 240, 0.2);
 
-  --accent: #ff5a1f;
-  --accent-ink: #0a0a0b;
-  --accent-soft: rgba(255, 90, 31, 0.14);
+  --accent: #93aaf2;
+  --accent-ink: #080a12;
+  --accent-soft: rgba(147, 170, 242, 0.16);
 
-  --lg-bg: rgba(255, 255, 255, 0.045);
-  --lg-bg-hover: rgba(255, 255, 255, 0.075);
+  --lg-bg: rgba(206, 218, 255, 0.045);
+  --lg-bg-hover: rgba(206, 218, 255, 0.075);
   --lg-blur: 24px;
-  --lg-sat: 165%;
-  --lg-rim-hi: rgba(255, 255, 255, 0.6);
-  --lg-rim-lo: rgba(255, 255, 255, 0.05);
-  --lg-inner-top: rgba(255, 255, 255, 0.26);
-  --lg-inner-bot: rgba(255, 255, 255, 0.07);
-  --lg-spec: rgba(255, 255, 255, 0.13);
-  --lg-shadow: 0 18px 54px -24px rgba(0, 0, 0, 0.95);
+  --lg-sat: 150%;
+  --lg-rim-hi: rgba(226, 234, 255, 0.55);
+  --lg-rim-lo: rgba(226, 234, 255, 0.05);
+  --lg-inner-top: rgba(226, 234, 255, 0.24);
+  --lg-inner-bot: rgba(226, 234, 255, 0.06);
+  --lg-spec: rgba(206, 218, 255, 0.13);
+  --lg-shadow: 0 18px 54px -24px rgba(0, 2, 10, 0.95);
 }
 
+/* Light: the backdrop and the shirt. */
 html[data-theme="light"] {
   color-scheme: light;
-  --bg: #f6f5f2;
-  --bg-2: #edebe5;
-  --text: #131316;
-  --muted: #5d5d66;
-  --dim: #8b8b93;
-  --line: rgba(19, 19, 22, 0.13);
-  --line-2: rgba(19, 19, 22, 0.24);
+  --bg: #eef1f6;
+  --bg-2: #e3e8f0;
+  --text: #121726;
+  --muted: #535c72;
+  --dim: #626b80;
+  --line: rgba(18, 23, 38, 0.12);
+  --line-2: rgba(18, 23, 38, 0.22);
 
-  --accent: #de4711;
+  --accent: #3a52b4;
   --accent-ink: #ffffff;
-  --accent-soft: rgba(222, 71, 17, 0.1);
+  --accent-soft: rgba(58, 82, 180, 0.1);
 
   --lg-bg: rgba(255, 255, 255, 0.5);
-  --lg-bg-hover: rgba(255, 255, 255, 0.68);
+  --lg-bg-hover: rgba(255, 255, 255, 0.7);
   --lg-blur: 22px;
-  --lg-sat: 175%;
+  --lg-sat: 160%;
   --lg-rim-hi: rgba(255, 255, 255, 0.98);
-  --lg-rim-lo: rgba(19, 19, 22, 0.08);
+  --lg-rim-lo: rgba(18, 23, 38, 0.08);
   --lg-inner-top: rgba(255, 255, 255, 0.9);
-  --lg-inner-bot: rgba(19, 19, 22, 0.05);
+  --lg-inner-bot: rgba(18, 23, 38, 0.05);
   --lg-spec: rgba(255, 255, 255, 0.5);
-  --lg-shadow: 0 16px 40px -22px rgba(40, 34, 28, 0.35);
+  --lg-shadow: 0 16px 40px -22px rgba(28, 38, 70, 0.32);
 }
+
+/* Arabic: Plex Sans Arabic carries both scripts. Arabic letters join, so
+   any letter-spacing breaks the words apart — tracking is zeroed for the
+   whole document, and uppercase labels are given a readable size. */
+html[lang="ar"] {
+  --sans: "IBM Plex Sans Arabic", "Geist", ui-sans-serif, system-ui, "Segoe UI", Tahoma, sans-serif;
+  --mono: "IBM Plex Sans Arabic", "Geist Mono", ui-monospace, "Segoe UI", Tahoma, monospace;
+}
+html[lang="ar"] :where(body, body *) { letter-spacing: 0 !important; }
 
 /* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -118,7 +132,7 @@ p { text-wrap: pretty; }
   clip-path: inset(50%); white-space: nowrap;
 }
 .skip-link {
-  position: fixed; top: 10px; left: 10px; z-index: 999;
+  position: fixed; top: 10px; inset-inline-start: 10px; z-index: 999;
   padding: 0.6rem 1rem; background: var(--text); color: var(--bg);
   border-radius: var(--r-s); font-weight: 500;
   transform: translateY(-180%); transition: transform 0.25s var(--ease);
@@ -249,7 +263,7 @@ body.is-loading { overflow: hidden; }
 /* Mark only — the hero already says the name, so repeating it in the
    bar just reads as duplication. Three ascending bars: the same glyph
    as the favicon, and on-topic for a BI portfolio. */
-.brand { display: flex; align-items: center; margin-right: auto; }
+.brand { display: flex; align-items: center; margin-inline-end: auto; }
 .brand__mark {
   width: 30px; height: 30px;
   overflow: visible;
@@ -418,6 +432,7 @@ html[data-theme="light"] .hero__canvas.is-ready { opacity: 0.8; }
   animation-play-state: paused; /* released when the preloader clears */
 }
 .hero__name .char.space { width: 0.24em; }
+.hero__name .char.is-static { transform: none; animation: none; }
 body.is-ready .hero__name .char { animation-play-state: running; }
 @keyframes charIn { to { transform: none; } }
 
@@ -501,23 +516,6 @@ body.is-ready .hero__name .char { animation-play-state: running; }
 }
 .facts dd { margin: 0; font-size: 0.9rem; }
 
-/* ── 3D star schema ────────────────────────────────────────── */
-.schema { padding-block: clamp(1rem, 3vw, 2.5rem); }
-.schema__wrap { position: relative; }
-.schema__canvas {
-  width: 100%;
-  height: clamp(290px, 40vw, 440px);
-  border-radius: var(--r-xl);
-  cursor: grab;
-  touch-action: pan-y;
-}
-.schema__canvas:active { cursor: grabbing; }
-.schema__cap {
-  position: absolute; left: clamp(0.5rem, 2vw, 1.5rem); bottom: clamp(0.5rem, 2vw, 1.5rem);
-  max-width: 30ch; pointer-events: none;
-}
-.schema__cap p { margin-top: 0.28rem; font-size: 0.84rem; color: var(--muted); }
-
 /* ── Roles ─────────────────────────────────────────────────── */
 .roles { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
 .role { padding: clamp(1.25rem, 3vw, 1.8rem); }
@@ -527,9 +525,9 @@ body.is-ready .hero__name .char { animation-play-state: running; }
 .role .terse { margin-top: 1rem; }
 
 .terse { list-style: none; padding: 0; display: grid; gap: 0.45rem; }
-.terse li { position: relative; padding-left: 1.1rem; font-size: 0.88rem; color: var(--muted); }
+.terse li { position: relative; padding-inline-start: 1.1rem; font-size: 0.88rem; color: var(--muted); }
 .terse li::before {
-  content: ""; position: absolute; left: 0; top: 0.62em;
+  content: ""; position: absolute; inset-inline-start: 0; top: 0.62em;
   width: 5px; height: 1px; background: var(--accent);
 }
 .terse b { color: var(--text); font-weight: 500; }
@@ -628,7 +626,7 @@ body.is-ready .hero__name .char { animation-play-state: running; }
   background: color-mix(in srgb, var(--bg) 70%, transparent);
 }
 .field label {
-  position: absolute; left: 0.9rem; top: 0.82rem;
+  position: absolute; inset-inline-start: 0.9rem; top: 0.82rem;
   font-size: 0.88rem; color: var(--dim); pointer-events: none;
   transform-origin: left top;
   transition: transform 0.26s var(--ease), color 0.26s;
@@ -671,12 +669,12 @@ body.is-ready .hero__name .char { animation-play-state: running; }
   transition: opacity 0.42s var(--ease), transform 0.52s var(--ease-glass);
 }
 .modal.is-open .modal__panel { opacity: 1; transform: none; }
-.modal__close { position: absolute; top: 1rem; right: 1rem; z-index: 4; }
+.modal__close { position: absolute; top: 1rem; inset-inline-end: 1rem; z-index: 4; }
 .modal__panel h2 {
   font-weight: 500;
   font-size: clamp(1.4rem, 1.15rem + 1.3vw, 2.05rem);
   letter-spacing: -0.038em;
-  margin: 0.35rem 0 1.3rem; padding-right: 3rem;
+  margin: 0.35rem 0 1.3rem; padding-inline-end: 3rem;
 }
 .modal__embed:not(:empty) { margin-top: 1.7rem; display: grid; gap: 0.7rem; }
 .modal__embed iframe {
@@ -714,7 +712,6 @@ body.is-ready .hero__name .char { animation-play-state: running; }
 
   .grid-2 { grid-template-columns: 1fr; gap: 1.1rem; }
   .col-label { position: static; flex-direction: row; gap: 0.75rem; }
-  .schema__cap { position: static; margin-top: 0.9rem; max-width: none; }
 }
 
 /* Portrait moves above the copy once the two columns stop fitting. */
@@ -736,7 +733,7 @@ body.is-ready .hero__name .char { animation-play-state: running; }
   .footer__inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 360px) {
   .hero__meta { grid-template-columns: 1fr; }
 }
 
@@ -773,7 +770,7 @@ html[data-motion="reduced"] .pip { animation: none; }
    Floating glass launcher, panel above it. Sits under the modal
    (z 200) so a case study always wins, above the header (z 120). */
 .chat-launcher {
-  position: fixed; right: clamp(0.9rem, 2.4vw, 1.6rem); bottom: clamp(0.9rem, 2.4vw, 1.6rem);
+  position: fixed; inset-inline-end: clamp(0.9rem, 2.4vw, 1.6rem); bottom: clamp(0.9rem, 2.4vw, 1.6rem);
   z-index: 150;
   display: inline-flex; align-items: center; gap: 0.55rem;
   padding: 0.7rem 1.05rem 0.7rem 0.85rem;
@@ -790,7 +787,7 @@ html[data-motion="reduced"] .pip { animation: none; }
 .chat-launcher[aria-expanded="true"] { opacity: 0; pointer-events: none; transform: scale(0.9); }
 
 .chat {
-  position: fixed; right: clamp(0.9rem, 2.4vw, 1.6rem); bottom: clamp(0.9rem, 2.4vw, 1.6rem);
+  position: fixed; inset-inline-end: clamp(0.9rem, 2.4vw, 1.6rem); bottom: clamp(0.9rem, 2.4vw, 1.6rem);
   z-index: 150;
   width: min(380px, calc(100vw - 1.8rem));
   height: min(560px, calc(100svh - var(--nav-h) - 3rem));
@@ -892,7 +889,7 @@ html[data-motion="reduced"] .pip { animation: none; }
   .chat-launcher { padding: 0.8rem; }
   .chat-launcher__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .chat-launcher svg { width: 22px; height: 22px; }
-  .chat { right: 0.6rem; left: 0.6rem; bottom: 0.6rem; width: auto; height: min(78svh, 600px); }
+  .chat { inset-inline: 0.6rem; bottom: 0.6rem; width: auto; height: min(78svh, 600px); }
   .chat__form input { font-size: 16px; } /* stops iOS zooming on focus */
 }
 
@@ -901,4 +898,331 @@ html[data-motion="reduced"] .chat__msg--typing span { animation: none; opacity: 
 
 @media print {
   .chat, .chat-launcher { display: none !important; }
+}
+
+/* ── Language switch ───────────────────────────────────────
+   Labelled in the language it switches TO, so each reader
+   recognises their own script.                                */
+.lang-btn {
+  display: inline-grid; place-items: center;
+  height: 32px; min-width: 50px; padding-inline: 0.7rem;
+  margin-inline-end: 0.2rem;
+  border: 1px solid var(--line-2); border-radius: 999px;
+  color: var(--text); font-size: 0.78rem; font-weight: 500; line-height: 1;
+  transition: background 0.28s var(--ease), border-color 0.28s var(--ease), transform 0.32s var(--ease-glass);
+}
+.lang-btn:hover { background: var(--lg-bg-hover); border-color: var(--text); transform: translateY(-1px); }
+.lang-btn__to-ar { font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif; font-size: 0.86rem; padding-bottom: 0.1em; }
+.lang-btn__to-en { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; }
+html[lang="ar"] .lang-btn__to-ar,
+html:not([lang="ar"]) .lang-btn__to-en { display: none; }
+
+/* ── Right-to-left details logical properties can't express ── */
+html[dir="rtl"] .hero__wash {
+  background:
+    linear-gradient(to left,
+      var(--bg) 0%,
+      color-mix(in oklab, var(--bg) 86%, transparent) 28%,
+      color-mix(in oklab, var(--bg) 42%, transparent) 46%,
+      transparent 60%),
+    linear-gradient(to bottom, var(--bg) 0%, transparent 22%, transparent 64%, var(--bg) 98%),
+    radial-gradient(125% 78% at 42% 50%, transparent 52%, var(--bg) 100%);
+}
+@media (max-width: 900px) {
+  html[dir="rtl"] .hero__wash {
+    background:
+      linear-gradient(to bottom, var(--bg) 0%, color-mix(in oklab, var(--bg) 68%, transparent) 30%, color-mix(in oklab, var(--bg) 68%, transparent) 72%, var(--bg) 98%),
+      radial-gradient(140% 60% at 50% 50%, transparent 40%, var(--bg) 100%);
+  }
+}
+html[dir="rtl"] .field label { transform-origin: right top; }
+html[dir="rtl"] .direct a { background-position: 100% 100%; }
+html[dir="rtl"] .chat { transform-origin: bottom left; }
+html[dir="rtl"] .chat__send svg { transform: scaleX(-1); }
+html[dir="rtl"] .chat__msg--assistant p { border-radius: var(--r-m) var(--r-m) 5px var(--r-m); }
+html[dir="rtl"] .chat__msg--user p { border-radius: var(--r-m) var(--r-m) var(--r-m) 5px; }
+
+/* Arabic display type needs room above and below the baseline. */
+html[lang="ar"] .hero__name { line-height: 1.28; padding-bottom: 0.12em; }
+html[lang="ar"] .big { line-height: 1.45; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { line-height: 1.4; }
+html[lang="ar"] .mono { font-size: 0.78rem; text-transform: none; }
+html[lang="ar"] .kicker { font-size: 0.74rem; text-transform: none; }
+html[lang="ar"] .facts dt { font-size: 0.76rem; text-transform: none; }
+html[lang="ar"] .hero__role { font-size: clamp(1.05rem, 0.98rem + 0.45vw, 1.34rem); }
+
+/* ── Impact ────────────────────────────────────────────────
+   The four numbers a hiring manager scans for. Counts up once,
+   on first sight; static under reduced motion.                */
+.impact {
+  list-style: none; padding: 0; margin-top: 2.4rem;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--r-m);
+  overflow: hidden;
+}
+.impact li {
+  display: grid; align-content: start; gap: 0.45rem;
+  padding: 1.15rem 1.15rem 1.25rem;
+  background: var(--bg);
+  transition: background 0.35s var(--ease);
+}
+.impact li:hover { background: color-mix(in oklab, var(--bg) 90%, var(--accent)); }
+.impact__n {
+  font-size: clamp(1.9rem, 1.35rem + 1.7vw, 2.75rem);
+  font-weight: 500; line-height: 1; letter-spacing: -0.045em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.impact__l { font-size: 0.83rem; line-height: 1.35; color: var(--muted); }
+.facts { margin-top: 2rem; }
+
+/* ── Star schema ───────────────────────────────────────────
+   Canvas and inspector share one glass stage. The canvas is the
+   subject; the inspector is where the model becomes legible.   */
+.schema { position: relative; padding-block: clamp(2.5rem, 6vw, 5rem); }
+.schema__intro {
+  display: grid; gap: 0.85rem;
+  max-width: 48rem;
+  margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+}
+.schema__eyebrow { color: var(--accent); }
+.schema__intro .big { max-width: 22ch; }
+.schema__intro p:not(.big) { color: var(--muted); max-width: 58ch; }
+
+.schema__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 350px);
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.schema__canvas {
+  grid-column: 1; grid-row: 1 / span 2;
+  display: block; width: 100%;
+  height: clamp(420px, 46vw, 580px);
+  cursor: grab;
+  touch-action: pan-y;
+}
+.schema__canvas:active { cursor: grabbing; }
+.schema__canvas.is-hovering { cursor: pointer; }
+
+.inspector {
+  grid-column: 2; grid-row: 2;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  min-height: 0;
+  padding: 1.2rem 1.4rem 1.4rem;
+  border-inline-start: 1px solid var(--line);
+  transition: opacity 0.22s var(--ease), translate 0.32s var(--ease);
+}
+.inspector.is-swapping { opacity: 0; translate: 0 6px; }
+.inspector__head { display: grid; gap: 0.3rem; }
+.inspector__kind { color: var(--accent); }
+.inspector__name {
+  font-family: var(--code);
+  font-size: 1.12rem; font-weight: 500; letter-spacing: -0.01em;
+}
+html[dir="rtl"] .inspector__name { text-align: right; }
+.inspector__desc { font-size: 0.86rem; line-height: 1.55; color: var(--muted); }
+.inspector__rel { color: var(--dim); }
+.inspector__cols {
+  list-style: none; padding: 0; margin: 0.2rem 0 0;
+  display: grid;
+  font-family: var(--code); font-size: 0.78rem;
+}
+.inspector__cols li {
+  display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;
+  padding-block: 0.42rem;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+}
+.inspector__cols li:last-child { border-bottom: 1px solid var(--line); }
+.badge {
+  font-family: var(--code); font-size: 0.62rem; letter-spacing: 0.08em;
+  padding: 0.16rem 0.42rem; border-radius: 6px;
+  border: 1px solid var(--line-2); color: var(--muted);
+}
+.badge--pk { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.badge--fk { border-color: var(--accent); color: var(--accent); }
+.inspector__dax {
+  margin: 0.3rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line); border-radius: var(--r-s);
+  background: color-mix(in oklab, var(--bg) 70%, transparent);
+  font-family: var(--code); font-size: 0.74rem; line-height: 1.55;
+  color: var(--text);
+  overflow-x: auto; white-space: pre;
+}
+.inspector__dax .k { color: var(--accent); }
+
+.schema__tables {
+  grid-column: 2; grid-row: 1;
+  display: flex; flex-wrap: wrap; align-content: start; gap: 0.35rem;
+  padding: 1.3rem 1.4rem 1rem;
+  border-inline-start: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.schema__tables button {
+  font-family: var(--code); font-size: 0.66rem; letter-spacing: 0.04em;
+  padding: 0.36rem 0.6rem;
+  border: 1px solid var(--line-2); border-radius: 999px;
+  color: var(--muted);
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease);
+}
+.schema__tables button:hover { color: var(--text); border-color: var(--text); }
+.schema__tables button[aria-pressed="true"] {
+  color: var(--accent); border-color: var(--accent); background: var(--accent-soft);
+}
+
+@media (max-width: 940px) {
+  .schema__stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; }
+  .schema__canvas { grid-column: 1; grid-row: 1; height: clamp(320px, 86vw, 460px); }
+  .schema__tables {
+    grid-column: 1; grid-row: 2;
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    padding: 0.8rem 1rem;
+    border-inline-start: 0; border-bottom: 0; border-top: 1px solid var(--line);
+  }
+  .schema__tables::-webkit-scrollbar { display: none; }
+  .schema__tables button { flex: none; }
+  .inspector { grid-column: 1; grid-row: 3; border-inline-start: 0; border-top: 1px solid var(--line); padding: 1.2rem 1.1rem 1.3rem; }
+}
+
+/* ── Stack pipeline ────────────────────────────────────────
+   Five stages in the order data actually travels, so the
+   numbering is the sequence. The rail fills with scroll; a
+   packet keeps moving along it.                                */
+.pipe {
+  --p: 0;
+  position: relative;
+  list-style: none; margin: clamp(2.4rem, 5vw, 3.6rem) 0 0; padding: 3rem 0 0;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.75rem;
+}
+.pipe__rail {
+  position: absolute; top: 1rem; inset-inline: 1.35rem;
+  height: 2px; border-radius: 2px;
+  background: var(--line);
+}
+.pipe__fill {
+  position: absolute; inset-block: 0; inset-inline-start: 0;
+  width: calc(var(--p) * 100%);
+  border-radius: inherit;
+  background: var(--accent);
+  box-shadow: 0 0 14px 0 var(--accent-soft);
+}
+.pipe__packet {
+  position: absolute; inset: 0;
+  transform: translateX(-100%);
+  animation: packet-ltr 3.8s cubic-bezier(0.55, 0, 0.25, 1) infinite;
+  pointer-events: none;
+}
+.pipe__packet::after {
+  content: "";
+  position: absolute; top: 50%; inset-inline-end: 0;
+  width: 7px; height: 7px; border-radius: 50%;
+  translate: 50% -50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 0 18px 3px var(--accent);
+}
+html[dir="rtl"] .pipe__packet { transform: translateX(100%); animation-name: packet-rtl; }
+html[dir="rtl"] .pipe__packet::after { translate: -50% -50%; }
+@keyframes packet-ltr { 0% { transform: translateX(-100%); opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
+@keyframes packet-rtl { 0% { transform: translateX(100%); opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
+@keyframes packet-down { 0% { transform: translateY(-100%); opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateY(0); opacity: 0; } }
+
+.stage {
+  position: relative;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  padding: 1.25rem 1.15rem 1.2rem;
+  min-width: 0;
+}
+.stage > .stage__node {
+  position: absolute; top: -3rem; inset-inline-start: 0.85rem;
+  display: grid; place-items: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  translate: 0 1px;
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  font-family: var(--code); font-size: 0.66rem; color: var(--muted);
+  transition: border-color 0.45s var(--ease), color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.stage.is-lit > .stage__node {
+  border-color: var(--accent); color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.stage__name { font-size: 1.06rem; font-weight: 500; }
+.stage__story { font-size: 0.84rem; line-height: 1.52; color: var(--muted); }
+.stage__tools {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-wrap: wrap; gap: 0.3rem;
+}
+html[dir="rtl"] .stage__tools { justify-content: flex-end; }
+.stage__tools li {
+  font-family: var(--code); font-size: 0.66rem;
+  padding: 0.22rem 0.5rem; border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: color-mix(in oklab, var(--bg) 55%, transparent);
+}
+.stage__proof {
+  margin-top: auto; padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 0.45rem;
+  font-size: 0.8rem; font-weight: 500; color: var(--accent);
+}
+.stage__proof::before {
+  content: ""; flex: none;
+  width: 9px; height: 9px;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.grounding {
+  margin: clamp(1.6rem, 3vw, 2.2rem) 0 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 2rem;
+  padding-top: 1.3rem; border-top: 1px solid var(--line);
+}
+.grounding div { display: grid; gap: 0.3rem; }
+.grounding dd { margin: 0; font-size: 0.9rem; }
+html[dir="rtl"] .grounding dd[dir="ltr"] { text-align: right; }
+
+@media (max-width: 1100px) and (min-width: 941px) {
+  .stage { padding-inline: 0.95rem; }
+  .stage__story { font-size: 0.8rem; }
+}
+
+@media (max-width: 940px) {
+  .pipe { grid-template-columns: minmax(0, 1fr); gap: 0.7rem; padding: 0; padding-inline-start: 2.9rem; }
+  .pipe__rail { top: 1.2rem; bottom: 1.2rem; inset-inline: auto; inset-inline-start: 1rem; width: 2px; height: auto; }
+  .pipe__fill { inset-inline: 0; top: 0; bottom: auto; width: auto; height: calc(var(--p) * 100%); }
+  .pipe__packet,
+  html[dir="rtl"] .pipe__packet { transform: translateY(-100%); animation-name: packet-down; }
+  .pipe__packet::after,
+  html[dir="rtl"] .pipe__packet::after { top: auto; bottom: 0; inset-inline-end: auto; left: 50%; translate: -50% 50%; }
+  .stage > .stage__node { top: 1.15rem; inset-inline-start: -2.9rem; translate: 0 0; }
+  .grounding { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── Project cards: live-report marker ─────────────────────── */
+.live { display: inline-flex; align-items: center; gap: 0.45rem; }
+.live .mono { color: var(--accent); }
+
+/* ── View transitions ──────────────────────────────────────
+   Theme and language changes reveal as a circle from the button
+   that caused them (JS drives the clip-path). Browsers without
+   the API simply switch instantly.                             */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+@media (max-width: 620px) {
+  .impact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .schema__intro .big { max-width: none; }
+}
+
+html[data-motion="reduced"] .pipe__packet { animation: none; opacity: 0; }
+
+@media print {
+  .schema__stage, .pipe__rail, .lang-btn { display: none !important; }
+  .pipe { grid-template-columns: 1fr; padding: 0; }
 }

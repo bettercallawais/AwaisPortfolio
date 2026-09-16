@@ -1,14 +1,21 @@
 /* ═══════════════════════════════════════════════════════════════
    Awais Ali — Portfolio · interaction layer
    No framework. One rAF scheduler for scroll work, pointer effects
-   throttled to frames, and a live motion switch in the header.
+   throttled to frames, and live motion / theme / language switches
+   in the header.
    ═══════════════════════════════════════════════════════════════ */
+
+import { applyLang, setLang, lang, t, text, TABLES } from './i18n.js';
 
 const root = document.documentElement;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const store = {
+  get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* private mode */ } },
+};
 
 /* Motion is a user-facing setting, not just an OS read. The OS value seeds
    it; the header switch overrides it and persists. Everything below asks
@@ -19,7 +26,7 @@ const motion = {
   },
   set full(v) {
     root.dataset.motion = v ? 'full' : 'reduced';
-    localStorage.setItem('motion', v ? 'full' : 'reduced');
+    store.set('motion', v ? 'full' : 'reduced');
     $('#motion-toggle')?.setAttribute('aria-pressed', String(v));
     scenes.forEach((s) => s.setMotion?.(v));
     if (v) parallax.kick();
@@ -28,17 +35,41 @@ const motion = {
 };
 
 const scenes = [];
+let schemaScene = null;
+
+/* Arabic chosen before load (stored or ?lang=ar): translate before
+   anything measures text or splits the hero name. */
+if (lang() === 'ar') {
+  applyLang();
+  document.title = t('title');
+}
+
+/* ── Circular reveal for theme and language changes ─────────
+   View Transitions where supported and motion is on; an instant
+   switch everywhere else.                                        */
+function revealFrom(btn, update) {
+  if (!document.startViewTransition || !motion.full || !btn) return update();
+  const r = btn.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const vt = document.startViewTransition(update);
+  vt.ready
+    .then(() => {
+      root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 720, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    })
+    .catch(() => {});
+}
 
 /* ── Tab title ─────────────────────────────────────────────
    Leave the tab and it turns into a sad face; come back and the
-   name returns. No timing, no conditions.                      */
-(() => {
-  const BASE = 'Awais Ali | BI Analyst';
-  const AWAY = ':(';
-  document.addEventListener('visibilitychange', () => {
-    document.title = document.hidden ? AWAY : BASE;
-  });
-})();
+   name returns.                                                  */
+document.addEventListener('visibilitychange', () => {
+  document.title = document.hidden ? t('away') : t('title');
+});
 
 /* ── Preloader ─────────────────────────────────────────────
    Held for a 2s floor so it reads as intentional rather than a
@@ -76,18 +107,39 @@ const scenes = [];
 /* ── Theme ─────────────────────────────────────────────────── */
 (() => {
   const btn = $('#theme-toggle');
+  const apply = (next) => {
+    root.dataset.theme = next;
+    scenes.forEach((s) => s.setTheme?.(next));
+  };
   btn?.addEventListener('click', () => {
     const next = root.dataset.theme === 'light' ? 'dark' : 'light';
-    root.dataset.theme = next;
-    localStorage.setItem('theme', next);
-    scenes.forEach((s) => s.setTheme?.(next));
+    store.set('theme', next);
+    revealFrom(btn, () => apply(next));
   });
 
   // Follow the OS only while the visitor hasn't made an explicit choice.
   matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-    if (localStorage.getItem('theme')) return;
-    root.dataset.theme = e.matches ? 'light' : 'dark';
-    scenes.forEach((s) => s.setTheme?.(root.dataset.theme));
+    if (store.get('theme')) return;
+    apply(e.matches ? 'light' : 'dark');
+  });
+})();
+
+/* ── Language ──────────────────────────────────────────────── */
+(() => {
+  const btn = $('#lang-toggle');
+  const label = () => {
+    const toAr = lang() !== 'ar';
+    btn.setAttribute('aria-label', toAr ? 'اقرأ الموقع بالعربية' : 'Read this site in English');
+    btn.title = toAr ? 'العربية' : 'English';
+  };
+  if (!btn) return;
+  label();
+  btn.addEventListener('click', () => {
+    const next = lang() === 'ar' ? 'en' : 'ar';
+    revealFrom(btn, () => {
+      setLang(next);
+      label();
+    });
   });
 })();
 
@@ -99,6 +151,22 @@ const scenes = [];
 })();
 
 /* ── Smooth scroll (lerped real scroll — keeps position:fixed sane) ── */
+
+/* True when the wheel should scroll something other than the page:
+   the chat log, a modal, a code block — anything that can still move
+   in the wheel's direction. */
+function innerScroller(target, dy) {
+  for (let el = target; el && el !== document.body && el !== root; el = el.parentElement) {
+    const oy = getComputedStyle(el).overflowY;
+    if ((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 1) {
+      const atTop = el.scrollTop <= 0;
+      const atEnd = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      if ((dy < 0 && !atTop) || (dy > 0 && !atEnd)) return true;
+    }
+  }
+  return false;
+}
+
 const smooth = (() => {
   if (!FINE) return null;
   const st = { target: window.scrollY, current: window.scrollY, running: false, on: true };
@@ -128,7 +196,7 @@ const smooth = (() => {
     'wheel',
     (e) => {
       if (!st.on || !motion.full || e.ctrlKey) return;
-      if (e.target.closest?.('.modal__panel')) return;
+      if (e.target.closest?.('.modal__panel, .chat') || innerScroller(e.target, e.deltaY)) return;
       e.preventDefault();
       const unit = e.deltaMode === 1 ? 18 : e.deltaMode === 2 ? window.innerHeight : 1;
       st.target = clamp(st.target + e.deltaY * unit, 0, max());
@@ -184,7 +252,33 @@ const parallax = (() => {
   };
 })();
 
-/* ── One scroll scheduler for header, progress and parallax ─── */
+/* ── Pipeline rail ─────────────────────────────────────────
+   Progress is state, not travel, so it tracks scroll in both
+   motion modes. Horizontal on desktop, vertical when stacked.   */
+const pipeline = (() => {
+  const pipe = $('#pipe');
+  if (!pipe) return { frame() {} };
+  const stages = $$('.stage', pipe);
+  const stacked = matchMedia('(max-width: 940px)');
+  let last = -1;
+
+  return {
+    frame() {
+      const r = pipe.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (r.bottom < -vh || r.top > vh * 2) return;
+      const p = stacked.matches
+        ? clamp((vh * 0.62 - r.top) / r.height, 0, 1)
+        : clamp((vh * 0.82 - r.top) / (r.height + vh * 0.3), 0, 1);
+      if (Math.abs(p - last) < 0.001) return;
+      last = p;
+      pipe.style.setProperty('--p', p.toFixed(4));
+      stages.forEach((s, i) => s.classList.toggle('is-lit', p >= (i + 0.3) / stages.length));
+    },
+  };
+})();
+
+/* ── One scroll scheduler for header, progress, parallax, rail ─── */
 (() => {
   const header = $('#header');
   const fill = $('#progress-fill');
@@ -201,21 +295,22 @@ const parallax = (() => {
 
     fill.style.width = `${max > 0 ? (y / max) * 100 : 0}%`;
     if (motion.full && parallax.any) parallax.frame();
+    pipeline.frame();
 
     last = y;
     queued = false;
   };
 
-  window.addEventListener(
-    'scroll',
-    () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(run);
-    },
-    { passive: true }
-  );
-  window.addEventListener('resize', () => parallax.kick());
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(run);
+  };
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', () => {
+    parallax.kick();
+    queue();
+  });
   run();
 })();
 
@@ -232,7 +327,7 @@ $$('a[href^="#"]').forEach((a) => {
     if (smooth && motion.full) smooth.to(y);
     else window.scrollTo({ top: y, behavior: motion.full ? 'smooth' : 'auto' });
     closeDrawer();
-    history.replaceState(null, '', id);
+    history.replaceState(null, '', location.search + id);
   });
 });
 
@@ -263,6 +358,10 @@ document.addEventListener('keydown', (e) => e.key === 'Escape' && closeDrawer())
     pill.style.transform = `translateX(${link.offsetLeft}px)`;
     pill.classList.add('is-on');
   };
+  const remeasure = () => {
+    const a = links.find((l) => l.classList.contains('is-active'));
+    if (a) move(a);
+  };
 
   const io = new IntersectionObserver(
     (entries) => {
@@ -279,30 +378,53 @@ document.addEventListener('keydown', (e) => e.key === 'Escape' && closeDrawer())
     { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.3, 1] }
   );
   sections.forEach((s) => io.observe(s));
-  window.addEventListener('resize', () => {
-    const a = links.find((l) => l.classList.contains('is-active'));
-    if (a) move(a);
-  });
+  window.addEventListener('resize', remeasure);
+  // Labels change width with language, and web fonts can land late.
+  document.addEventListener('site:lang', () => requestAnimationFrame(remeasure));
+  document.fonts?.ready.then(remeasure);
 })();
 
-/* ── Split the hero name ───────────────────────────────────── */
-$$('[data-split]').forEach((node, w) => {
-  const text = node.textContent;
-  node.textContent = '';
-  [...text].forEach((ch, i) => {
-    const s = document.createElement('span');
-    s.className = ch === ' ' ? 'char space' : 'char';
-    s.style.setProperty('--i', i + w * 6);
-    s.textContent = ch === ' ' ? ' ' : ch;
-    node.appendChild(s);
-  });
-  node.setAttribute('aria-label', text);
-});
+/* ── Split the hero name ───────────────────────────────────
+   Latin splits per letter for the cascade. Arabic letters join,
+   so Arabic splits per word — splitting letters would break the
+   script's shaping.                                              */
+(() => {
+  const node = $('[data-split]');
+  if (!node) return;
+  const en = node.textContent.trim();
+
+  const render = (animated) => {
+    const value = text(node.dataset.i18nSplit, en);
+    const parts = lang() === 'ar' ? value.split(/(\s+)/).filter(Boolean) : [...value];
+    node.textContent = '';
+    parts.forEach((part, i) => {
+      const s = document.createElement('span');
+      const space = /^\s+$/.test(part);
+      s.className = space ? 'char space' : 'char';
+      if (!animated) s.classList.add('is-static');
+      s.style.setProperty('--i', i);
+      s.textContent = space ? ' ' : part;
+      node.appendChild(s);
+    });
+    node.setAttribute('aria-label', value);
+  };
+
+  render(true);
+  document.addEventListener('site:lang', () => render(false));
+})();
 
 /* ── Reveal ────────────────────────────────────────────────
    Observation starts only once the preloader has cleared, so the
    hero's entrance actually plays for the visitor instead of
    finishing behind the loading screen.                          */
+const whenReady = (fn) => {
+  if ($('#preloader') && !document.body.classList.contains('is-ready')) {
+    document.addEventListener('site:ready', fn, { once: true });
+  } else {
+    fn();
+  }
+};
+
 (() => {
   const items = $$('[data-reveal]');
   items.forEach((el) => el.dataset.revealDelay && el.style.setProperty('--d', el.dataset.revealDelay));
@@ -318,13 +440,47 @@ $$('[data-split]').forEach((node, w) => {
     { rootMargin: '0px 0px -10% 0px', threshold: 0.06 }
   );
 
-  const start = () => items.forEach((el) => io.observe(el));
+  whenReady(() => items.forEach((el) => io.observe(el)));
+})();
 
-  if ($('#preloader') && !document.body.classList.contains('is-ready')) {
-    document.addEventListener('site:ready', start, { once: true });
-  } else {
-    start();
-  }
+/* ── Impact counters ───────────────────────────────────────
+   Count up once when first seen. The markup already holds the
+   final figure, so without JS — or with motion off — the number
+   is simply there.                                              */
+(() => {
+  const els = $$('[data-count]');
+  if (!els.length || !motion.full) return;
+  els.forEach((el) => (el.textContent = `0${el.dataset.suffix || ''}`));
+
+  const run = (el) => {
+    const end = Number(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    if (!motion.full) {
+      el.textContent = `${end}${suffix}`;
+      return;
+    }
+    const t0 = performance.now() + 260; // let the row's reveal start first
+    const dur = 1500;
+    const step = (now) => {
+      const k = clamp((now - t0) / dur, 0, 1);
+      const eased = 1 - Math.pow(1 - k, 4);
+      el.textContent = `${Math.round(end * eased)}${suffix}`;
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const io = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        obs.unobserve(e.target);
+        run(e.target);
+      });
+    },
+    { threshold: 0.6 }
+  );
+  whenReady(() => els.forEach((el) => io.observe(el)));
 })();
 
 /* ── Liquid-glass specular + 3D tilt with depth layers ─────── */
@@ -380,6 +536,84 @@ $$('[data-split]').forEach((node, w) => {
   });
 })();
 
+/* ── Star-schema inspector ─────────────────────────────────
+   Chips, canvas clicks and the inspector all drive one selection.
+   The 3D scene reports picks through onSelect; chips work even
+   before (or without) WebGL.                                    */
+const inspector = (() => {
+  const panel = $('#inspector');
+  if (!panel) return { select() {} };
+  const kindEl = $('#inspector-kind');
+  const nameEl = $('#inspector-name');
+  const descEl = $('#inspector-desc');
+  const relEl = $('#inspector-rel');
+  const colsEl = $('#inspector-cols');
+  const daxEl = $('#inspector-dax');
+  const chips = $$('.schema__tables button');
+  let current = 'FACT_SALES';
+  let timer = null;
+
+  const render = () => {
+    const T = TABLES[current];
+    const fact = T.kind === 'fact';
+    kindEl.textContent = t(fact ? 'fact' : 'dim');
+    nameEl.textContent = current;
+    descEl.textContent = T.desc[lang()];
+    relEl.textContent = t(fact ? 'factRel' : 'dimRel');
+
+    colsEl.replaceChildren(
+      ...T.cols.map(([col, key]) => {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        name.textContent = col;
+        li.append(name);
+        if (key) {
+          const b = document.createElement('span');
+          b.className = `badge${key === 'PK' ? ' badge--pk' : key === 'FK' ? ' badge--fk' : ''}`;
+          b.textContent = key === 'M' ? t('measure') : key;
+          li.append(b);
+        }
+        return li;
+      })
+    );
+
+    daxEl.hidden = !T.dax;
+    if (T.dax) {
+      daxEl.replaceChildren(
+        ...T.dax.split(/(DIVIDE)/).map((part) => {
+          if (part !== 'DIVIDE') return document.createTextNode(part);
+          const k = document.createElement('span');
+          k.className = 'k';
+          k.textContent = part;
+          return k;
+        })
+      );
+    }
+
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.table === current)));
+  };
+
+  const select = (name, fromScene = false) => {
+    if (!TABLES[name]) return;
+    if (!fromScene) schemaScene?.select(name);
+    if (name === current) return;
+    current = name;
+    clearTimeout(timer);
+    if (!motion.full) return render();
+    panel.classList.add('is-swapping');
+    timer = setTimeout(() => {
+      render();
+      panel.classList.remove('is-swapping');
+    }, 170);
+  };
+
+  chips.forEach((c) => c.addEventListener('click', () => select(c.dataset.table)));
+  document.addEventListener('site:lang', render);
+  render();
+
+  return { select, get current() { return current; } };
+})();
+
 /* ── Case-study modal ──────────────────────────────────────── */
 (() => {
   const modal = $('#modal');
@@ -396,17 +630,19 @@ $$('[data-split]').forEach((node, w) => {
     stackEl.textContent = card.dataset.stack || '';
 
     const tpl = $('.pc__detail', card);
-    bodyEl.replaceChildren(tpl ? tpl.content.cloneNode(true) : document.createTextNode(''));
+    const detail = tpl ? tpl.content.cloneNode(true) : document.createTextNode('');
+    if (detail.querySelectorAll) applyLang(detail);
+    bodyEl.replaceChildren(detail);
 
     // iframe is built on open and destroyed on close — never idling.
     embedEl.replaceChildren();
     if (card.dataset.embed) {
       const h = document.createElement('span');
       h.className = 'mono';
-      h.textContent = 'Live report';
+      h.textContent = t('liveReport');
       const f = document.createElement('iframe');
       f.src = card.dataset.embed;
-      f.title = `${card.dataset.title} — live Power BI report`;
+      f.title = `${card.dataset.title} — ${t('liveTitle')}`;
       f.loading = 'lazy';
       f.allowFullscreen = true;
       embedEl.append(h, f);
@@ -463,7 +699,7 @@ $$('[data-split]').forEach((node, w) => {
     e.preventDefault();
     status.className = 'form-status';
     status.textContent = '';
-    label.textContent = 'Sending…';
+    label.textContent = t('sending');
     btn.disabled = true;
 
     try {
@@ -474,18 +710,21 @@ $$('[data-split]').forEach((node, w) => {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       status.className = 'form-status ok';
-      status.textContent = 'Sent. I’ll reply to your email shortly.';
+      status.textContent = t('sentMsg');
       form.reset();
-      label.textContent = 'Sent';
+      label.textContent = t('sent');
     } catch (err) {
       status.className = 'form-status err';
-      status.innerHTML =
-        'Could not send — please email <a href="mailto:ds.awaisali@gmail.com">ds.awaisali@gmail.com</a> directly.';
-      label.textContent = 'Send';
+      const a = document.createElement('a');
+      a.href = 'mailto:ds.awaisali@gmail.com';
+      a.dir = 'ltr';
+      a.textContent = 'ds.awaisali@gmail.com';
+      status.replaceChildren(`${t('failMsg')} `, a);
+      label.textContent = t('send');
       console.warn('Contact form:', err);
     } finally {
       btn.disabled = false;
-      setTimeout(() => (label.textContent = 'Send'), 4000);
+      setTimeout(() => (label.textContent = t('send')), 4000);
     }
   });
 })();
@@ -511,8 +750,13 @@ $('#year').textContent = new Date().getFullYear();
     }
     try {
       const { initSchema } = await import('./schema3d.js');
-      const schema = initSchema($('#schema-canvas'), { theme, motion: motion.full });
-      if (schema) scenes.push(schema);
+      schemaScene = initSchema($('#schema-canvas'), {
+        theme,
+        motion: motion.full,
+        selected: inspector.current,
+        onSelect: (name) => inspector.select(name, true),
+      });
+      if (schemaScene) scenes.push(schemaScene);
     } catch (e) {
       console.warn('schema3d:', e);
     }
